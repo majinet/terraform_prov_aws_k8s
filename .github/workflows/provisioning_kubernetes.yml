@@ -9,9 +9,7 @@ jobs:
     environment: development
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup container
+      - name: Pre-setup container
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
@@ -35,3 +33,39 @@ jobs:
 
             # Apply sysctl params without reboot
             sudo sysctl --system
+
+      - name: Setup container runtime
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            wget -q -O containerd-1.6.18-linux-amd64.tar.gz "https://github.com/containerd/containerd/releases/download/v1.6.18"
+            sudo tar Cxzvf /usr/local containerd-1.6.2-linux-amd64.tar.gz
+            
+            wget -q -O https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+            sudo mv containerd.service /usr/local/lib/systemd/system/containerd.service
+            
+            sudo systemctl daemon-reload
+            sudo systemctl enable --now containerd
+
+      - name: Setup runc
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            wget -q -O runc.amd64 "https://github.com/opencontainers/runc/releases/download/v1.1.4"
+            sudo install -m 755 runc.amd64 /usr/local/sbin/runc
+
+      - name: Setup cni plugin
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            wget -q -O cni-plugins-linux-amd64-v1.2.0.tgz "https://github.com/containernetworking/plugins/releases/download/v1.2.0"
+            sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.2.0.tgz
