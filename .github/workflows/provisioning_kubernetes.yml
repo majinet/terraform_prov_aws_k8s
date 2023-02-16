@@ -79,5 +79,6 @@ jobs:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |     
+          script: |
+            sudo mkdir -p /etc/containerd
             sudo containerd config default > /etc/containerd/config.toml
