@@ -91,5 +91,5 @@ jobs:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          source: "containerd/config/config.toml"
+          source: "terraform_prov_aws_k8s/containerd/config/config.toml"
           target: "/etc/containerd"
