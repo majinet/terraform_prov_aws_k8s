@@ -85,11 +85,12 @@ jobs:
             sudo chmod -R 777 /etc/containerd
             sudo containerd config default > /etc/containerd/config.toml
 
-      - name: copy file via ssh
-        uses: appleboy/scp-action@master
+      - name: deploy file via ssh
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          source: "terraform_prov_aws_k8s/containerd/config/config.toml"
-          target: "/etc/containerd"
+        username: ${{ vars.AWS_EC2_USERNAME }}
+        server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+        ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+        local_path: 'containerd/config/config.toml'
+        remote_path: '/etc/containerd'
+        sftpArgs: '-o ConnectTimeout=5'
