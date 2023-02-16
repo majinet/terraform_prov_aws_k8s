@@ -29,7 +29,7 @@ jobs:
 
       - name: Configure AWS credentials
         run: |
-          aws --configure default ${{ secrets.AWS_ACCESS_KEY_ID_TERRAFORM }} ${{ secrets.AWS_SECRET_ACCESS_KEY_TERRAFORM }}
+          awsv2 --configure default ${{ secrets.AWS_ACCESS_KEY_ID_TERRAFORM }} ${{ secrets.AWS_SECRET_ACCESS_KEY_TERRAFORM }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
