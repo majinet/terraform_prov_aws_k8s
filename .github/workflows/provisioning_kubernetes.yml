@@ -154,7 +154,7 @@ jobs:
       - name: Setup container runtime
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
@@ -170,7 +170,7 @@ jobs:
       - name: Setup runc
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
@@ -180,7 +180,7 @@ jobs:
       - name: Setup cni plugin
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
@@ -193,7 +193,7 @@ jobs:
       - name: Create config.toml
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
@@ -205,7 +205,7 @@ jobs:
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           username: ${{ vars.AWS_EC2_USERNAME }}
-          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          server: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           local_path: 'containerd/config/config.toml'
           remote_path: '/etc/containerd'
@@ -214,7 +214,7 @@ jobs:
       - name: apply the changes and restart containerd
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
@@ -223,7 +223,7 @@ jobs:
       - name: install kubeadm, kubelet, and kubectl
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
