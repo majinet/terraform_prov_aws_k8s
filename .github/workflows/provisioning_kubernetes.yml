@@ -92,4 +92,4 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           source: "containerd/config/config.toml"
-          target: "/etc/containerd/config.toml"
+          target: "/etc/containerd"
