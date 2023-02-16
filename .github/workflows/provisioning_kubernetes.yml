@@ -42,7 +42,7 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             wget -q -O containerd-1.6.18-linux-amd64.tar.gz https://github.com/containerd/containerd/releases/download/v1.6.18/containerd-1.6.18-linux-amd64.tar.gz
-            sudo tar Cxzvf /usr/local containerd-1.6.2-linux-amd64.tar.gz
+            sudo tar Cxzvf /usr/local containerd-1.6.18-linux-amd64.tar.gz
             
             wget -q -O containerd.service https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
             sudo mv containerd.service /usr/local/lib/systemd/system/containerd.service
