@@ -36,13 +36,13 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform -chdir=terraform/ init
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform -chdir=terraform/ plan -no-color
         continue-on-error: true
 
       - name: Terraform Destroy
         id: destroy
-        run: terraform destroy -auto-approve -input=false
+        run: terraform -chdir=terraform/ destroy -auto-approve -input=false
