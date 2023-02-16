@@ -94,3 +94,12 @@ jobs:
           local_path: 'containerd/config/config.toml'
           remote_path: '/etc/containerd'
           sftpArgs: '-o ConnectTimeout=5'
+
+      - name: apply the changes and restart containerd
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo systemctl restart containerd
