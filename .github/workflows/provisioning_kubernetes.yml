@@ -88,9 +88,9 @@ jobs:
       - name: deploy file via ssh
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
-        username: ${{ vars.AWS_EC2_USERNAME }}
-        server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-        ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-        local_path: 'containerd/config/config.toml'
-        remote_path: '/etc/containerd'
-        sftpArgs: '-o ConnectTimeout=5'
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: 'containerd/config/config.toml'
+          remote_path: '/etc/containerd'
+          sftpArgs: '-o ConnectTimeout=5'
