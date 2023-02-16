@@ -41,7 +41,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            wget -q -O containerd-1.6.18-linux-amd64.tar.gz "https://github.com/containerd/containerd/releases/download/v1.6.18"
+            wget -q -O https://github.com/containerd/containerd/releases/download/v1.6.18/containerd-1.6.18-linux-amd64.tar.gz
             sudo tar Cxzvf /usr/local containerd-1.6.2-linux-amd64.tar.gz
             
             wget -q -O https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
@@ -57,7 +57,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            wget -q -O runc.amd64 "https://github.com/opencontainers/runc/releases/download/v1.1.4"
+            wget -q -O https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64
             sudo install -m 755 runc.amd64 /usr/local/sbin/runc
 
       - name: Setup cni plugin
@@ -67,5 +67,5 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            wget -q -O cni-plugins-linux-amd64-v1.2.0.tgz "https://github.com/containernetworking/plugins/releases/download/v1.2.0"
+            wget -q -O https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-amd64-v1.2.0.tgz
             sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.2.0.tgz
