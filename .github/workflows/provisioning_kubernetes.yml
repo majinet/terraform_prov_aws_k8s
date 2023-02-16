@@ -9,6 +9,7 @@ jobs:
     environment: development
 
     steps:
+      - uses: actions/checkout@v3
       - name: Pre-setup container
         uses: appleboy/ssh-action@master
         with:
@@ -83,3 +84,12 @@ jobs:
             sudo mkdir -p /etc/containerd
             sudo chmod -R 777 /etc/containerd
             sudo containerd config default > /etc/containerd/config.toml
+
+      - name: copy file via ssh
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          source: "containerd/config/config.toml"
+          target: "/etc/containerd/config.toml"
