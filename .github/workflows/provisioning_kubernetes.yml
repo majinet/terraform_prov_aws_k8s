@@ -81,5 +81,5 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             sudo mkdir -p /etc/containerd
-            sudo chmod -R 755 /etc/containerd
+            sudo chmod -R 777 /etc/containerd
             sudo containerd config default > /etc/containerd/config.toml
