@@ -36,7 +36,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform -chdir=terraform/ init
+        run: terraform -chdir=terraform/ init -backend-config="profile=TERRAFORM_ACCESS"
 
       - name: Terraform Plan
         id: plan
