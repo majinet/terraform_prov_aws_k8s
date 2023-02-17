@@ -129,25 +129,6 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y -q kubelet kubeadm kubectl
             sudo apt-mark hold kubelet kubeadm kubectl
-
-      - name: deploy kubeadm-config.yaml via ssh
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          server: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
-          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          local_path: 'kubernetes/config/kubeadm-config.yaml'
-          remote_path: '/home/ubuntu'
-          sftpArgs: '-o ConnectTimeout=5'
-
-      - name: init kubeadm-config.yaml
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo kubeadm init --config kubeadm-config.yaml --ignore-preflight-errors=NumCPU,Mem
       
 
   setup_k8s_binary_in_worker_node:
