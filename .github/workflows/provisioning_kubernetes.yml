@@ -35,6 +35,16 @@ jobs:
             # Apply sysctl params without reboot
             sudo sysctl --system
 
+      - name: Disable swap
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo swapoff -a
+            (crontab -l 2>/dev/null; echo "@reboot /sbin/swapoff -a") | crontab - || true
+
       - name: Setup container runtime
         uses: appleboy/ssh-action@master
         with:
@@ -111,14 +121,34 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            export DEBIAN_FRONTEND=noninteractive
+            echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
             sudo apt-get update
-            sudo apt-get install -y apt-transport-https ca-certificates curl
+            sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
             echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
             sudo apt-get update
-            sudo apt-get install -y kubelet kubeadm kubectl
+            sudo apt-get install -y -q kubelet kubeadm kubectl
             sudo apt-mark hold kubelet kubeadm kubectl
+
+      - name: deploy kubeadm-config.yaml via ssh
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          server: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: 'kubernetes/config/kubeadm-config.yaml'
+          remote_path: '/home/ubuntu'
+          sftpArgs: '-o ConnectTimeout=5'
+
+      - name: init kubeadm-config.yaml
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo kubeadm init --config kubeadm-config.yaml --ignore-preflight-errors=NumCPU,Mem
+      
 
   setup_k8s_binary_in_worker_node:
     runs-on: ubuntu-latest
@@ -150,6 +180,16 @@ jobs:
 
             # Apply sysctl params without reboot
             sudo sysctl --system
+
+      - name: Disable swap
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo swapoff -a
+            (crontab -l 2>/dev/null; echo "@reboot /sbin/swapoff -a") | crontab - || true
 
       - name: Setup container runtime
         uses: appleboy/ssh-action@master
@@ -227,11 +267,11 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            export DEBIAN_FRONTEND=noninteractive
+            echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
             sudo apt-get update
-            sudo apt-get install -y apt-transport-https ca-certificates curl
+            sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
             echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
             sudo apt-get update
-            sudo apt-get install -y kubelet kubeadm kubectl
+            sudo apt-get install -y -q kubelet kubeadm kubectl
             sudo apt-mark hold kubelet kubeadm kubectl
