@@ -121,7 +121,9 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+            sudo chown -R ubuntu:ubuntu /var/cache/debconf
+            sudo echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+            sudo chown -R root:root /var/cache/debconf
             sudo apt-get update
             sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -248,7 +250,9 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+            sudo chown -R ubuntu:ubuntu /var/cache/debconf
+            sudo echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+            sudo chown -R root:root /var/cache/debconf
             sudo apt-get update
             sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
