@@ -1,0 +1,28 @@
+name: Setup Kubernetes Cluster
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_k8s_cluster_in_control_plane:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup cluster
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo kubeadm init --pod-network-cidr=172.30.0.0/16 --ignore-preflight-errors=NumCPU,Mem
+            
+            mkdir -p $HOME/.kube
+            sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+            sudo chown $(id -u):$(id -g) $HOME/.kube/config
+            
+            kubectl apply -f https://docs.projectcalico.org/v3.23/manifests/calico.yaml
+            
+            kubectl apply -f https://projectcontour.io/quickstart/contour.yaml

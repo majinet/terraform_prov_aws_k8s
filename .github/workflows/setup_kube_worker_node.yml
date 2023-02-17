@@ -1,0 +1,20 @@
+name: Setup Kubernetes Worker node
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_k8s_cluster_in_worker_node:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup cluster
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo kubeadm join 172.30.4.241:6443 --token m2hifb.1r68vcgmtsxhfraj --discovery-token-ca-cert-hash sha256:146e2b50f6cf4a9cdabb6da609b7b3d8e215c6742c77a1dafcad64984520cfe5
