@@ -71,19 +71,6 @@ jobs:
             wget -q -O runc.arm64 https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.arm64
             sudo install -m 755 runc.arm64 /usr/local/sbin/runc
 
-      - name: Setup cni plugin
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo mkdir -p /opt/cni/bin
-            sudo chmod -R 755 /opt/cni/bin
-            
-            wget -q -O cni-plugins-linux-arm64-v1.2.0.tgz https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-arm64-v1.2.0.tgz
-            sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-arm64-v1.2.0.tgz
-
       - name: Create config.toml
         uses: appleboy/ssh-action@master
         with:
@@ -199,19 +186,6 @@ jobs:
           script: |
             wget -q -O runc.amd64 https://github.com/opencontainers/runc/releases/download/v1.1.4/runc.amd64
             sudo install -m 755 runc.amd64 /usr/local/sbin/runc
-
-      - name: Setup cni plugin
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo mkdir -p /opt/cni/bin
-            sudo chmod -R 755 /opt/cni/bin
-            
-            wget -q -O cni-plugins-linux-amd64-v1.2.0.tgz https://github.com/containernetworking/plugins/releases/download/v1.2.0/cni-plugins-linux-amd64-v1.2.0.tgz
-            sudo tar Cxzvf /opt/cni/bin cni-plugins-linux-amd64-v1.2.0.tgz
 
       - name: Create config.toml
         uses: appleboy/ssh-action@master
