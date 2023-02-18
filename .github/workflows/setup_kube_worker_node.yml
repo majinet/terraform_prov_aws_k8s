@@ -17,4 +17,4 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo kubeadm join 172.30.4.241:6443 --token m2hifb.1r68vcgmtsxhfraj --discovery-token-ca-cert-hash sha256:146e2b50f6cf4a9cdabb6da609b7b3d8e215c6742c77a1dafcad64984520cfe5
+            sudo kubeadm join 172.30.4.241:6443 --token 096ysy.v6y1vtiflpao2pqp --discovery-token-ca-cert-hash sha256:7a98782e06ac38bd29dcab6459b58aab7b27f593314819c47ae20adb0ebe1e01

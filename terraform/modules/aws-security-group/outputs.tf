@@ -9,3 +9,7 @@ output "sg_control_plane_id" {
 output "sg_worker_nodes_id" {
   value = aws_security_group.worker_nodes.id
 }
+
+output "sg_calico_id" {
+  value = aws_security_group.calico.id
+}
