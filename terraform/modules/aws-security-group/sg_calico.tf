@@ -51,14 +51,6 @@ resource "aws_security_group" "calico" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description      = "flannel networking (VXLAN)"
-    from_port        = 4789
-    to_port          = 4789
-    protocol         = "udp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
   egress {
     description      = "Calico networking (BGP)"
     from_port        = 179
@@ -95,14 +87,6 @@ resource "aws_security_group" "calico" {
     description      = "Calico networking with IPv6 Wireguard enabled"
     from_port        = 51821
     to_port          = 51821
-    protocol         = "udp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  egress {
-    description      = "flannel networking (VXLAN)"
-    from_port        = 4789
-    to_port          = 4789
     protocol         = "udp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
