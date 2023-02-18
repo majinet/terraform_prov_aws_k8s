@@ -1,10 +1,10 @@
-name: Setup Kubernetes Cluster
+name: Setup Kubernetes Cluster and worker node
 
 on:
   workflow_dispatch:
 
 jobs:
-  setup_k8s_cluster_in_control_plane:
+  setup_cluster_and_worker:
     runs-on: ubuntu-latest
     environment: development
 
@@ -17,12 +17,35 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo kubeadm init --pod-network-cidr=172.30.0.0/16 --ignore-preflight-errors=NumCPU,Mem
+            sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=NumCPU,Mem
             
             mkdir -p $HOME/.kube
             sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
             sudo chown $(id -u):$(id -g) $HOME/.kube/config
             
-            kubectl apply -f https://docs.projectcalico.org/v3.23/manifests/calico.yaml
+            kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/tigera-operator.yaml
+            kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/custom-resources.yaml
+            
+            kubectl taint nodes --all node-role.kubernetes.io/control-plane-
             
             kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
+
+      - name: get join command for worker node
+        id: get_join_command
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            join_command=$(echo "join_command=kubeadm token create --print-join-command")
+            echo "::set-output name=join::join_command"
+
+      - name: join worker node to cluster
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            ${{ steps.get_join_command.outputs.join }}
