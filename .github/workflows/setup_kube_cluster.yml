@@ -38,7 +38,8 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            echo "join_command='kubeadm token create --print-join-command'" >> "$GITHUB_OUTPUT"
+            export join_command=echo "kubeadm token create --print-join-command"
+            echo $join_command >> "$GITHUB_OUTPUT"
 
       - name: join worker node to cluster
         uses: appleboy/ssh-action@master
@@ -48,3 +49,19 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             sudo ${{ steps.get_join_command.outputs.join_command }}
+
+      - name: setup NFS share
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo mkdir -p /mnt/nfs/promdata
+            sudo chown nobody:nogroup /mnt/nfs/promdata
+            
+            export CLIENT_IP=${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
+            envsubst < system_files/exports > exports
+            sudo mv exports /etc/exports
+            
+            sudo systemctl restart nfs-kernel-server

@@ -17,7 +17,7 @@ spec:
     path: "/mnt/nfs/promdata"
 ---
 apiVersion: v1
-kind: PersistentVolumeClaims
+kind: PersistentVolumeClaim
 metadata:
   name: pvc-nfs-data
   namespace: monitoring

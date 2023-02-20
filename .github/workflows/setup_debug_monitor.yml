@@ -10,6 +10,33 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: deploy metric server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f metric-server/config
+
+      - name: deploy kube state metrics
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |      
+            kubectl apply -f kube-state-metrics/config
+
+      - name: deploy node exporter
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |      
+            kubectl apply -f node_exporter/config
+
       - name: deploy prometheus
         uses: appleboy/ssh-action@master
         with:
@@ -20,14 +47,25 @@ jobs:
             kubectl apply -f prometheus/config/ns_monitoring.yaml
 
             export SERVER_IP=${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-            envsubst < prometheus/config/pv-pvc.yaml | kubectl apply -f -
+            envsubst < prometheus/config/pv-pvc.yaml > pv-pvc.yaml
+            mv pv-pvc.yaml prometheus/config/pv-pvc.yaml
 
-            kubectl apply -f prometheus/config/cluster-role.yaml
-            kubectl apply -f prometheus/config/service-account.yaml
-            kubectl apply -f prometheus/config/cluster-role-binding.yaml
+            kubectl apply -f prometheus/config
 
-            kubectl apply -f prometheus/config/configmap.yaml
-            kubectl apply -f prometheus/config/deployment.yaml
-            kubectl apply -f prometheus/config/service.yaml
+      - name: deploy alert manager
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |      
+            kubectl apply -f alert-manager/config
 
-            kubectl apply -f prometheus/config/kube-state-metrics.yml
+      - name: deploy Grafana
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |      
+            kubectl apply -f grafana/config

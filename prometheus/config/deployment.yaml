@@ -1,45 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prometheus
+  name: prometheus-deployment
   namespace: monitoring
   labels:
-    app: prometheus
+    app: prometheus-server
 spec:
   replicas: 1
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
   selector:
     matchLabels:
-      app: prometheus
+      app: prometheus-server
   template:
     metadata:
       labels:
-        app: prometheus
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "9090"
+        app: prometheus-server
     spec:
       containers:
-      - name: prometheus
-        image: prom/prometheus
-        args:
-          - '--storage.tsdb.retention=6h'
-          - '--storage.tsdb.path=/prometheus'
-          - '--config.file=/etc/prometheus/prometheus.yml'
-        ports:
-        - name: web
-          containerPort: 9090
-        volumeMounts:
-        - name: prometheus-config-volume
-          mountPath: /etc/prometheus
-        - name: prometheus-storage-volume
-          mountPath: /prometheus
-      restartPolicy: Always
-
+        - name: prometheus
+          image: prom/prometheus
+          args:
+            - "--storage.tsdb.retention.time=12h"
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus/"
+          ports:
+            - containerPort: 9090
+          resources:
+            requests:
+              cpu: 500m
+              memory: 500M
+            limits:
+              cpu: 1
+              memory: 1Gi
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus/
+            - name: prometheus-storage-volume
+              mountPath: /prometheus/
       volumes:
       - name: prometheus-config-volume
         configMap:

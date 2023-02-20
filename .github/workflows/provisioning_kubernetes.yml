@@ -115,6 +115,7 @@ jobs:
             sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
             echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+            sudo apt install nfs-kernel-server
             sudo apt-get update
             sudo apt-get install -y -q kubelet kubeadm kubectl
             sudo apt-mark hold kubelet kubeadm kubectl
@@ -231,6 +232,7 @@ jobs:
             sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
             echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+            sudo apt-get install nfs-common
             sudo apt-get update
             sudo apt-get install -y -q kubelet kubeadm kubectl
             sudo apt-mark hold kubelet kubeadm kubectl
