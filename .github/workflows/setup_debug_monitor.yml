@@ -1,0 +1,33 @@
+name: Setup Debugging and Monitoring tool
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_cluster_and_worker:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: deploy prometheus
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f prometheus/config/ns_monitoring.yaml
+
+            export SERVER_IP=${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+            envsubst < prometheus/config/pv-pvc.yaml | kubectl apply -f -
+
+            kubectl apply -f prometheus/config/cluster-role.yaml
+            kubectl apply -f prometheus/config/service-account.yaml
+            kubectl apply -f prometheus/config/cluster-role-binding.yaml
+
+            kubectl apply -f prometheus/config/configmap.yaml
+            kubectl apply -f prometheus/config/deployment.yaml
+            kubectl apply -f prometheus/config/service.yaml
+
+            kubectl apply -f prometheus/config/kube-state-metrics.yml

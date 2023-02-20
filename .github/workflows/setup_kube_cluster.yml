@@ -30,37 +30,6 @@ jobs:
             
             kubectl apply -f https://projectcontour.io/quickstart/contour.yaml
 
-      - name: deploy metric server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            kubectl apply -f metric-server/config/components.yaml
-
-      - name: deploy prometheus
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            kubectl apply -f prometheus/config/ns_monitoring.yaml
-            
-            export SERVER_IP=${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-            envsubst < prometheus/config/pv-pvc.yaml | kubectl apply -f -
-            
-            kubectl apply -f prometheus/config/cluster-role.yaml
-            kubectl apply -f prometheus/config/service-account.yaml
-            kubectl apply -f prometheus/config/cluster-role-binding.yaml
-            
-            kubectl apply -f prometheus/config/configmap.yaml
-            kubectl apply -f prometheus/config/deployment.yaml
-            kubectl apply -f prometheus/config/service.yaml
-            
-            kubectl apply -f prometheus/config/kube-state-metrics.yml
-
       - name: get join command for worker node
         id: get_join_command
         uses: appleboy/ssh-action@master
@@ -69,8 +38,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            join_command=$(echo "join_command=kubeadm token create --print-join-command")
-            echo "::set-output name=join::join_command"
+            echo "join_command='kubeadm token create --print-join-command'" >> "$GITHUB_OUTPUT"
 
       - name: join worker node to cluster
         uses: appleboy/ssh-action@master
@@ -79,4 +47,4 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo ${{ steps.get_join_command.outputs.join }}
+            sudo ${{ steps.get_join_command.outputs.join_command }}
