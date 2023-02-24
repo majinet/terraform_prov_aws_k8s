@@ -115,10 +115,12 @@ jobs:
             sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
             echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-            sudo apt install nfs-kernel-server
+            sudo apt install -y -q nfs-kernel-server
+            sudo apt-get install -y -q nfs-common
             sudo apt-get update
             sudo apt-get install -y -q kubelet kubeadm kubectl
             sudo apt-mark hold kubelet kubeadm kubectl
+            sudo snap install helm --classic
       
 
   setup_k8s_binary_in_worker_node:
@@ -155,7 +157,7 @@ jobs:
       - name: Disable swap
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          host: ${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
@@ -232,7 +234,7 @@ jobs:
             sudo apt-get install -y -q apt-transport-https ca-certificates curl
             sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
             echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-            sudo apt-get install nfs-common
+            sudo apt-get install -y -q nfs-common
             sudo apt-get update
             sudo apt-get install -y -q kubelet kubeadm kubectl
             sudo apt-mark hold kubelet kubeadm kubectl

@@ -38,8 +38,8 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            export join_command=echo "kubeadm token create --print-join-command"
-            echo $join_command >> "$GITHUB_OUTPUT"
+            output=$(kubeadm token create --print-join-command)
+            echo "::set-output name=join::$output"
 
       - name: join worker node to cluster
         uses: appleboy/ssh-action@master
@@ -48,7 +48,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo ${{ steps.get_join_command.outputs.join_command }}
+            sudo ${{ steps.get_join_command.outputs.join }}
 
       - name: setup NFS share
         uses: appleboy/ssh-action@master
@@ -60,8 +60,18 @@ jobs:
             sudo mkdir -p /mnt/nfs/promdata
             sudo chown nobody:nogroup /mnt/nfs/promdata
             
-            export CLIENT_IP=${{ vars.AWS_EC2_WORKER_NODE_1_IP }}
+            sudo mkdir -p /mnt/nfs/default_data
+            sudo chown nobody:nogroup /mnt/nfs/default_data
+            
+            export CLIENT_IP1=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}
+            export CLIENT_IP2=${{ vars.AWS_EC2_WORKER_NODE_1_PRIVATE_IP }}
             envsubst < system_files/exports > exports
             sudo mv exports /etc/exports
             
             sudo systemctl restart nfs-kernel-server
+            
+            kubectl create namespace
+            helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --namespace nfs --set nfs.server=172.30.1.55 --set nfs.path=/mnt/nfs/default_data
+            
+            kubectl apply -f kubernetes/config/default_pvc.yaml
+            

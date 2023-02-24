@@ -8,5 +8,6 @@
 # /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
-/mnt/nfs/promdata   $CLIENT_IP(rw,sync,no_subtree_check)
-/home               $CLIENT_IP(rw,sync,no_root_squash,no_subtree_check)
+/mnt/nfs/promdata       $CLIENT_IP1(rw,sync,no_subtree_check) $CLIENT_IP2(rw,sync,no_subtree_check)
+/mnt/nfs/default_data   $CLIENT_IP1(rw,sync,no_subtree_check) $CLIENT_IP2(rw,sync,no_subtree_check)
+/home                   $CLIENT_IP1(rw,sync,no_root_squash,no_subtree_check) $CLIENT_IP2(rw,sync,no_root_squash,no_subtree_check)
