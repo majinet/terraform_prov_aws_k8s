@@ -33,41 +33,28 @@ module "aws_security_group" {
   vpc_id = module.aws_networks.vpc_id
 }
 
-#resource "aws_instance" "control_plane" {
-#  ami           = "ami-0fa715233bba2f42e"
-#  instance_type = "t4g.xlarge"
-#  subnet_id     = module.aws_networks.subnet_1_id
-#  associate_public_ip_address = true
-#  key_name = "terraform-ec2"
-#  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
-
-#  tags = {
-#    Name = "Kubernetes control plane instance"
-#  }
-#}
-
 resource "aws_instance" "control_plane" {
-  ami           = "ami-0b828c1c5ac3f13ee"
-  instance_type = "t2.micro"
+  ami           = "ami-0fa715233bba2f42e"
+  instance_type = "t4g.small"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
-  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
 
   tags = {
     Name = "Kubernetes control plane instance"
   }
 }
 
-resource "aws_instance" "worker" {
-  ami           = "ami-0b828c1c5ac3f13ee"
-  instance_type = "t2.micro"
-  subnet_id     = module.aws_networks.subnet_2_id
-  associate_public_ip_address = true
-  key_name = "terraform-ec2"
-  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+#resource "aws_instance" "worker" {
+#  ami           = "ami-0b828c1c5ac3f13ee"
+#  instance_type = "t2.micro"
+#  subnet_id     = module.aws_networks.subnet_2_id
+#  associate_public_ip_address = true
+#  key_name = "terraform-ec2"
+#  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
-  tags = {
-    Name = "Kubernetes worker instance"
-  }
-}
+#  tags = {
+#    Name = "Kubernetes worker instance"
+#  }
+#}
