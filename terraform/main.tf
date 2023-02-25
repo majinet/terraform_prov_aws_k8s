@@ -33,9 +33,22 @@ module "aws_security_group" {
   vpc_id = module.aws_networks.vpc_id
 }
 
+#resource "aws_instance" "control_plane" {
+#  ami           = "ami-0fa715233bba2f42e"
+#  instance_type = "t4g.xlarge"
+#  subnet_id     = module.aws_networks.subnet_1_id
+#  associate_public_ip_address = true
+#  key_name = "terraform-ec2"
+#  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
+
+#  tags = {
+#    Name = "Kubernetes control plane instance"
+#  }
+#}
+
 resource "aws_instance" "control_plane" {
-  ami           = "ami-0fa715233bba2f42e"
-  instance_type = "t4g.xlarge"
+  ami           = "ami-0b828c1c5ac3f13ee"
+  instance_type = "t2.micro"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
