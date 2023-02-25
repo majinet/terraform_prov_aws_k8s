@@ -13,3 +13,7 @@ output "sg_worker_nodes_id" {
 output "sg_calico_id" {
   value = aws_security_group.calico.id
 }
+
+output "sg_microk8s" {
+  value = aws_security_group.microk8s.id
+}

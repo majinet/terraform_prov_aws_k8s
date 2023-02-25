@@ -52,7 +52,7 @@ resource "aws_instance" "control_plane" {
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
-  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
+  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
   tags = {
     Name = "Kubernetes control plane instance"
@@ -65,7 +65,7 @@ resource "aws_instance" "worker" {
   subnet_id     = module.aws_networks.subnet_2_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
-  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_worker_nodes_id, module.aws_security_group.sg_calico_id]
+  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
   tags = {
     Name = "Kubernetes worker instance"
