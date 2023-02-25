@@ -35,7 +35,7 @@ module "aws_security_group" {
 
 resource "aws_instance" "control_plane" {
   ami           = "ami-0fa715233bba2f42e"
-  instance_type = "t4g.large"
+  instance_type = "t4g.xlarge"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
