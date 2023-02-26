@@ -75,6 +75,14 @@ resource "aws_security_group" "microk8s" {
     cidr_blocks      = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description      = "dashboard"
+    from_port        = 10443
+    to_port          = 10443
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
   tags = {
     Name = "Security Group for Services binding to the default Host interface"
   }

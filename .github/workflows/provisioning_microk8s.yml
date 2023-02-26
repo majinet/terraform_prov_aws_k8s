@@ -1,0 +1,66 @@
+name: Provisioning microk8s
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_k8s_binary_in_control_plane:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: installation
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo snap install microk8s --classic --channel=1.26
+            
+            microk8s status --wait-ready
+            
+            sudo usermod -a -G microk8s $USER
+            sudo chown -f -R $USER ~/.kube
+            
+            microk8s enable dns storage dashboard helm3 ingress metallb:10.64.140.43-10.64.140.49
+
+      - name: setup NFS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo apt-get install nfs-kernel-server
+            
+            sudo mkdir -p /srv/nfs
+            sudo chown nobody:nogroup /srv/nfs
+            sudo chmod 0777 /srv/nfs
+            sudo mv /etc/exports /etc/exports.bak
+            echo '/srv/nfs 172.30.0.0/24(rw,sync,no_subtree_check)' | sudo tee /etc/exports
+            
+            sudo systemctl restart nfs-kernel-server
+            
+            microk8s helm3 repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+            microk8s helm3 repo update
+            
+            microk8s helm3 install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet
+            
+            microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --namespace kube-system
+            
+            microk8s kubectl get csidrivers
+            
+            microk8s kubectl apply -f microk8s/config
+
+      - name: configuration
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
+            
+            sudo snap restart microk8s

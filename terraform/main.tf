@@ -35,11 +35,17 @@ module "aws_security_group" {
 
 resource "aws_instance" "control_plane" {
   ami           = "ami-0fa715233bba2f42e"
-  instance_type = "t4g.small"
+  instance_type = "r5a.large"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
-  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
+  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = 50
+    delete_on_termination = true
+  }
 
   tags = {
     Name = "Kubernetes control plane instance"
@@ -53,6 +59,12 @@ resource "aws_instance" "control_plane" {
 #  associate_public_ip_address = true
 #  key_name = "terraform-ec2"
 #  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+#  root_block_device {
+#    volume_type = "gp2"
+#    volume_size = 1
+#    delete_on_termination = true
+#  }
 
 #  tags = {
 #    Name = "Kubernetes worker instance"

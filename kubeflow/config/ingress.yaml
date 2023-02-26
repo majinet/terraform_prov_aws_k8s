@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io
+kind: Ingress
+metadata:
+  name: istio-ingressgateway
+spec:
+  rules:
+  - host: 10.64.140.43.nip.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: istio-ingressgateway
+          servicePort: 80
