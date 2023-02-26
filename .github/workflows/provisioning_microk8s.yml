@@ -23,8 +23,19 @@ jobs:
             
             sudo usermod -a -G microk8s $USER
             sudo chown -f -R $USER ~/.kube
-            
+
+      - name: configuration
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
             microk8s enable dns storage dashboard helm3 ingress metallb:10.64.140.43-10.64.140.49
+
+            echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
+
+            sudo snap restart microk8s
 
       - name: setup NFS
         uses: appleboy/ssh-action@master
@@ -53,14 +64,3 @@ jobs:
             microk8s kubectl get csidrivers
             
             microk8s kubectl apply -f microk8s/config
-
-      - name: configuration
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
-            
-            sudo snap restart microk8s
