@@ -34,7 +34,7 @@ module "aws_security_group" {
 }
 
 resource "aws_instance" "control_plane" {
-  ami           = "ami-0fa715233bba2f42e"
+  ami           = "ami-0b828c1c5ac3f13ee"
   instance_type = "r5a.large"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
@@ -53,7 +53,7 @@ resource "aws_instance" "control_plane" {
 }
 
 #resource "aws_instance" "worker" {
-#  ami           = "ami-0b828c1c5ac3f13ee"
+#  ami           = "ami-0b828c1c5ac3f13ee"  ami-0fa715233bba2f42e
 #  instance_type = "t2.micro"
 #  subnet_id     = module.aws_networks.subnet_2_id
 #  associate_public_ip_address = true
