@@ -61,8 +61,8 @@ resource "aws_launch_template" "ec2_launch" {
 
   instance_requirements {
     memory_mib {
-      min = 32768
-      max = 32768
+      min = 32000
+      max = 64000
     }
 
     vcpu_count {
