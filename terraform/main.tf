@@ -33,23 +33,125 @@ module "aws_security_group" {
   vpc_id = module.aws_networks.vpc_id
 }
 
-resource "aws_spot_instance_request" "control_plane" {
-  ami                    = "ami-0b828c1c5ac3f13ee"
-  spot_price             = 0.12
-  instance_type          = "r5a.large"
-  spot_type              = "one-time"
-  block_duration_minutes = 180
-  wait_for_fulfillment   = "true"
+resource "aws_spot_fleet_request" "control_plane" {
+  iam_fleet_role          = "arn:aws:iam::404886641986:role/aws-ec2-spot-fleet-tagging-role"
+  target_capacity         = 1
+  spot_price              = 0.12
+  wait_for_fulfillment    = "true"
+  allocation_strategy     = "lowestPrice"
+  fleet_type              = "request"
+  valid_until             = "2023-02-26T20:44:20Z"
 
-  subnet_id     = module.aws_networks.subnet_1_id
-  associate_public_ip_address = true
-  key_name = "terraform-ec2"
-  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+  launch_specification {
+    instance_type     = "r5a.xlarge"
+    ami               = "ami-0b828c1c5ac3f13ee"
+    key_name          = "terraform-ec2"
+    availability_zone = "us-east-1a"
+    associate_public_ip_address = true
 
-  root_block_device {
-    volume_type = "gp3"
-    volume_size = 50
-    delete_on_termination = true
+    security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+    root_block_device {
+      volume_type = "gp3"
+      volume_size = 50
+      delete_on_termination = true
+    }
+  }
+
+  launch_specification {
+    instance_type     = "r5.xlarge"
+    ami               = "ami-0b828c1c5ac3f13ee"
+    key_name          = "terraform-ec2"
+    availability_zone = "us-east-1a"
+    associate_public_ip_address = true
+
+    security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+    root_block_device {
+      volume_type = "gp3"
+      volume_size = 50
+      delete_on_termination = true
+    }
+  }
+
+  launch_specification {
+    instance_type     = "r5.xlarge"
+    ami               = "ami-0b828c1c5ac3f13ee"
+    key_name          = "terraform-ec2"
+    availability_zone = "us-east-1a"
+    associate_public_ip_address = true
+
+    security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+    root_block_device {
+      volume_type = "gp3"
+      volume_size = 50
+      delete_on_termination = true
+    }
+  }
+
+  launch_specification {
+    instance_type     = "r6i.xlarge"
+    ami               = "ami-0b828c1c5ac3f13ee"
+    key_name          = "terraform-ec2"
+    availability_zone = "us-east-1a"
+    associate_public_ip_address = true
+
+    security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+    root_block_device {
+      volume_type = "gp3"
+      volume_size = 50
+      delete_on_termination = true
+    }
+  }
+
+  launch_specification {
+    instance_type     = "r5b.xlarge"
+    ami               = "ami-0b828c1c5ac3f13ee"
+    key_name          = "terraform-ec2"
+    availability_zone = "us-east-1a"
+    associate_public_ip_address = true
+
+    security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+    root_block_device {
+      volume_type = "gp3"
+      volume_size = 50
+      delete_on_termination = true
+    }
+  }
+
+  launch_specification {
+    instance_type     = "r5n.xlarge"
+    ami               = "ami-0b828c1c5ac3f13ee"
+    key_name          = "terraform-ec2"
+    availability_zone = "us-east-1a"
+    associate_public_ip_address = true
+
+    security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+    root_block_device {
+      volume_type = "gp3"
+      volume_size = 50
+      delete_on_termination = true
+    }
+  }
+
+  launch_specification {
+    instance_type     = "t3a.2xlarge"
+    ami               = "ami-0b828c1c5ac3f13ee"
+    key_name          = "terraform-ec2"
+    availability_zone = "us-east-1a"
+    associate_public_ip_address = true
+
+    security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+    root_block_device {
+      volume_type = "gp3"
+      volume_size = 50
+      delete_on_termination = true
+    }
   }
 
   tags = {
@@ -66,7 +168,7 @@ resource "aws_spot_instance_request" "control_plane" {
 #  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
 #  root_block_device {
-#    volume_type = "gp2"
+#    volume_type = "gp3"
 #    volume_size = 50
 #    delete_on_termination = true
 #  }
