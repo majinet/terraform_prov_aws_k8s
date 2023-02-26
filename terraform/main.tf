@@ -116,7 +116,7 @@ resource "aws_ec2_fleet" "control_plane" {
 */
 
 resource "aws_instance" "control_plane" {
-  ami           = "ami-0b828c1c5ac3f13ee"
+  ami           = "ami-09cd747c78a9add63"
   instance_type = "r5a.xlarge"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
