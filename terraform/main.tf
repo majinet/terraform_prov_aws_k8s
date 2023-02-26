@@ -92,7 +92,7 @@ resource "aws_launch_template" "ec2_launch" {
 resource "aws_spot_fleet_request" "control_plane" {
   iam_fleet_role          = "arn:aws:iam::404886641986:role/aws-ec2-spot-fleet-tagging-role"
   target_capacity         = 1
-  spot_price              = 0.2
+  spot_price              = 0.3
   wait_for_fulfillment    = "true"
   allocation_strategy     = "lowestPrice"
   fleet_type              = "request"
