@@ -90,7 +90,6 @@ resource "aws_launch_template" "ec2_launch" {
 }
 
 resource "aws_ec2_fleet" "control_plane" {
-  type = "instant"
 
   launch_template_config {
     launch_template_specification {
@@ -99,7 +98,7 @@ resource "aws_ec2_fleet" "control_plane" {
     }
 
     override {
-      max_price = "0.1"
+      max_price = "0.2"
     }
   }
 
