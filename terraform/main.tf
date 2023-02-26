@@ -35,7 +35,7 @@ module "aws_security_group" {
 
 resource "aws_spot_instance_request" "control_plane" {
   ami                    = "ami-0b828c1c5ac3f13ee"
-  spot_price             = 0.0732
+  spot_price             = 0.12
   instance_type          = "r5a.large"
   spot_type              = "one-time"
   # block_duration_minutes = 120
