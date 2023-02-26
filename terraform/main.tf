@@ -115,7 +115,6 @@ resource "aws_ec2_fleet" "control_plane" {
 }
 */
 
-/*
 resource "aws_instance" "control_plane" {
   ami           = "ami-0b828c1c5ac3f13ee"
   instance_type = "r5a.xlarge"
@@ -134,7 +133,6 @@ resource "aws_instance" "control_plane" {
     Name = "Kubernetes control plane instance"
   }
 }
-*/
 
 #resource "aws_instance" "worker" {
 #  ami           = "ami-0b828c1c5ac3f13ee"  ami-0fa715233bba2f42e
