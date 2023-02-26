@@ -89,24 +89,29 @@ resource "aws_launch_template" "ec2_launch" {
   }
 }
 
-resource "aws_spot_fleet_request" "control_plane" {
-  iam_fleet_role          = "arn:aws:iam::404886641986:role/aws-ec2-spot-fleet-tagging-role"
-  target_capacity         = 1
-  spot_price              = 0.3
-  wait_for_fulfillment    = "true"
-  allocation_strategy     = "lowestPrice"
-  fleet_type              = "request"
-  valid_until             = "2023-02-26T20:44:20Z"
+resource "aws_ec2_fleet" "control_plane" {
+  type = "request"
+  terminate_instances = True
 
   launch_template_config {
     launch_template_specification {
-      id      = aws_launch_template.ec2_launch.id
-      version = aws_launch_template.ec2_launch.latest_version
+      launch_template_id = aws_launch_template.ec2_launch.id
+      version            = aws_launch_template.ec2_launch.latest_version
+    }
+
+    override {
+      max_price = "0.1"
     }
   }
 
-  tags = {
-    Name = "Kubernetes control plane instance"
+  target_capacity_specification {
+    default_target_capacity_type = "spot"
+    total_target_capacity        = 1
+  }
+
+  spot_options {
+      allocation_strategy     = "price-capacity-optimized"
+
   }
 }
 
