@@ -17,7 +17,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo snap install microk8s --classic --channel=1.26
+            sudo snap install microk8s --classic --channel=1.22/stable
             
             sudo microk8s status --wait-ready
             
@@ -31,7 +31,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            microk8s enable dns storage dashboard helm3 ingress metallb:10.64.140.43-10.64.140.49
+            microk8s enable dns hostpath-storage dashboard helm3 ingress metallb:10.64.140.43-10.64.140.49
 
             echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
 
@@ -44,7 +44,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo apt-get install nfs-kernel-server
+            sudo apt-get install -y -q nfs-kernel-server
             
             sudo mkdir -p /srv/nfs
             sudo chown nobody:nogroup /srv/nfs
