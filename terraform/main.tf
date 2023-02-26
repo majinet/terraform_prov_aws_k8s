@@ -51,7 +51,7 @@ data "aws_ami" "ubuntu_ami" {
     values = ["hvm"]
   }
 
-  owners = ["self"]
+  owners = ["099720109477"]
 }
 
 resource "aws_launch_template" "ec2_launch" {
