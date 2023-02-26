@@ -89,6 +89,7 @@ resource "aws_launch_template" "ec2_launch" {
   }
 }
 
+/*
 resource "aws_ec2_fleet" "control_plane" {
 
   launch_template_config {
@@ -112,25 +113,28 @@ resource "aws_ec2_fleet" "control_plane" {
 
   }
 }
+*/
 
-#resource "aws_instance" "control_plane" {
-#  ami           = "ami-0b828c1c5ac3f13ee"
-#  instance_type = "r5a.large"
-#  subnet_id     = module.aws_networks.subnet_1_id
-#  associate_public_ip_address = true
-#  key_name = "terraform-ec2"
-#  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+/*
+resource "aws_instance" "control_plane" {
+  ami           = "ami-0b828c1c5ac3f13ee"
+  instance_type = "r5a.xlarge"
+  subnet_id     = module.aws_networks.subnet_1_id
+  associate_public_ip_address = true
+  key_name = "terraform-ec2"
+  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
-#  root_block_device {
-#    volume_type = "gp3"
-#    volume_size = 50
-#    delete_on_termination = true
-#  }
+  root_block_device {
+    volume_type = "gp3"
+    volume_size = 50
+    delete_on_termination = true
+  }
 
-#  tags = {
-#    Name = "Kubernetes control plane instance"
-#  }
-#}
+  tags = {
+    Name = "Kubernetes control plane instance"
+  }
+}
+*/
 
 #resource "aws_instance" "worker" {
 #  ami           = "ami-0b828c1c5ac3f13ee"  ami-0fa715233bba2f42e
