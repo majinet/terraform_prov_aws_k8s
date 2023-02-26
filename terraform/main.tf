@@ -7,16 +7,16 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "terraform-remote-state-demo1"
+    bucket         = "terraform-remote-state-demo2"
     key            = "terraform.tfstate"
-    region         = "ap-northeast-1"
+    region         = "us-east-1"
     dynamodb_table = "terraform-remote-state"
   }
 }
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "ap-northeast-1"
+  region = "us-east-1"
 
   shared_config_files      = ["~/.aws/conf"]
   shared_credentials_files = ["~/.aws/credentials"]

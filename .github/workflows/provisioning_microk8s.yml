@@ -63,4 +63,4 @@ jobs:
             
             microk8s kubectl get csidrivers
             
-            microk8s kubectl apply -f microk8s/config
+            microk8s kubectl apply -f terraform_prov_aws_k8s/microk8s/config
