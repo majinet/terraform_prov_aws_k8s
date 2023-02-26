@@ -33,8 +33,29 @@ module "aws_security_group" {
   vpc_id = module.aws_networks.vpc_id
 }
 
+data "aws_ami" "ubuntu_ami" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["self"]
+}
+
 resource "aws_launch_template" "ec2_launch" {
-  image_id    = "ami-0b828c1c5ac3f13ee"
+  image_id    = data.aws_ami.ubuntu_ami.id
   key_name = "terraform-ec2"
   vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
@@ -58,9 +79,11 @@ resource "aws_launch_template" "ec2_launch" {
 
   block_device_mappings {
 
-    root_block_device {
-      volume_size = 50
+    device_name = data.aws_ami.ubuntu_ami.root_device_name
+
+    ebs {
       volume_type = "gp3"
+      volume_size = 50
       delete_on_termination = true
     }
   }
