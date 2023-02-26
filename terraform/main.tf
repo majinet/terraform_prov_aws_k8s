@@ -44,9 +44,10 @@ resource "aws_launch_template" "ec2_launch" {
       min = 32768
       max = 32768
     }
+
     vcpu_count {
       min = 2
-      min = 4
+      max = 4
     }
   }
 
