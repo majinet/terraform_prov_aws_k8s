@@ -36,7 +36,7 @@ module "aws_security_group" {
 resource "aws_spot_instance_request" "control_plane" {
   ami                    = "ami-0b828c1c5ac3f13ee"
   spot_price             = 0.12
-  instance_type          = "r5a.large"
+  instance_type          = "r5a.xlarge"
   spot_type              = "one-time"
   # block_duration_minutes = 120
   wait_for_fulfillment   = "true"
@@ -59,7 +59,7 @@ resource "aws_spot_instance_request" "control_plane" {
 
 #resource "aws_instance" "control_plane" {
 #  ami           = "ami-0b828c1c5ac3f13ee"
-#  instance_type = "r5a.large"
+#  instance_type = "r5a.xlarge"
 #  subnet_id     = module.aws_networks.subnet_1_id
 #  associate_public_ip_address = true
 #  key_name = "terraform-ec2"
