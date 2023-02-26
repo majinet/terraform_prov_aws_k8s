@@ -46,7 +46,6 @@ resource "aws_spot_fleet_request" "control_plane" {
     instance_type     = "r5a.xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
-    availability_zone = "us-east-1a"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
@@ -62,7 +61,6 @@ resource "aws_spot_fleet_request" "control_plane" {
     instance_type     = "r5.xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
-    availability_zone = "us-east-1a"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
@@ -78,7 +76,6 @@ resource "aws_spot_fleet_request" "control_plane" {
     instance_type     = "r5.xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
-    availability_zone = "us-east-1a"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
@@ -94,7 +91,6 @@ resource "aws_spot_fleet_request" "control_plane" {
     instance_type     = "r6i.xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
-    availability_zone = "us-east-1a"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
@@ -110,7 +106,6 @@ resource "aws_spot_fleet_request" "control_plane" {
     instance_type     = "r5b.xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
-    availability_zone = "us-east-1a"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
@@ -126,7 +121,6 @@ resource "aws_spot_fleet_request" "control_plane" {
     instance_type     = "r5n.xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
-    availability_zone = "us-east-1a"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
@@ -142,7 +136,6 @@ resource "aws_spot_fleet_request" "control_plane" {
     instance_type     = "t3a.2xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
-    availability_zone = "us-east-1a"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
