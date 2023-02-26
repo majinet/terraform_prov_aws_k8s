@@ -61,6 +61,6 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
+            echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
             
             sudo snap restart microk8s
