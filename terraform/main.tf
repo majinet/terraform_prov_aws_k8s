@@ -35,7 +35,6 @@ module "aws_security_group" {
 
 resource "aws_launch_template" "ec2_launch" {
   image_id    = "ami-0b828c1c5ac3f13ee"
-  instance_generations = ["current"]
   key_name = "terraform-ec2"
   vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
@@ -49,6 +48,8 @@ resource "aws_launch_template" "ec2_launch" {
       min = 2
       max = 4
     }
+
+    instance_generations = ["current"]
   }
 
   network_interfaces {
