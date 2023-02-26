@@ -33,6 +33,37 @@ module "aws_security_group" {
   vpc_id = module.aws_networks.vpc_id
 }
 
+resource "aws_launch_template" "ec2_launch" {
+  image_id    = "ami-0b828c1c5ac3f13ee"
+  instance_generations = ["current"]
+  key_name = "terraform-ec2"
+  vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+
+  instance_requirements {
+    memory_mib {
+      min = 32768
+      max = 32768
+    }
+    vcpu_count {
+      min = 2
+      min = 4
+    }
+  }
+
+  network_interfaces {
+    associate_public_ip_address = true
+  }
+
+  block_device_mappings {
+
+    root_block_device {
+      volume_size = 50
+      volume_type = "gp3"
+      delete_on_termination = true
+    }
+  }
+}
+
 resource "aws_spot_fleet_request" "control_plane" {
   iam_fleet_role          = "arn:aws:iam::404886641986:role/aws-ec2-spot-fleet-tagging-role"
   target_capacity         = 1
@@ -42,31 +73,10 @@ resource "aws_spot_fleet_request" "control_plane" {
   fleet_type              = "request"
   valid_until             = "2023-02-26T20:44:20Z"
 
-  launch_specification {
-    ami                         = "ami-0b828c1c5ac3f13ee"
-    key_name                    = "terraform-ec2"
-    associate_public_ip_address = true
-
-    vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
-
-    root_block_device {
-      volume_type           = "gp3"
-      volume_size           = 50
-      delete_on_termination = true
-    }
-
-    override {
-      instance_requirements {
-        memory_mib {
-          min = 32768
-          max = 32768
-        }
-
-        vcpu_count {
-          min = 2
-          max = 4
-        }
-      }
+  launch_template_config {
+    launch_template_specification {
+      id      = aws_launch_template.ec2_launch.id
+      version = aws_launch_template.ec2_launch.latest_version
     }
   }
 
