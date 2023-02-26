@@ -91,7 +91,7 @@ resource "aws_launch_template" "ec2_launch" {
 
 resource "aws_ec2_fleet" "control_plane" {
   type = "request"
-  terminate_instances = True
+  terminate_instances = true
 
   launch_template_config {
     launch_template_specification {
