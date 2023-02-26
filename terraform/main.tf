@@ -43,7 +43,6 @@ resource "aws_spot_fleet_request" "control_plane" {
   valid_until             = "2023-02-26T20:44:20Z"
 
   launch_specification {
-    instance_type     = "r5a.xlarge"
     ami               = "ami-0b828c1c5ac3f13ee"
     key_name          = "terraform-ec2"
     associate_public_ip_address = true
@@ -54,6 +53,18 @@ resource "aws_spot_fleet_request" "control_plane" {
       volume_type = "gp3"
       volume_size = 50
       delete_on_termination = true
+    }
+
+    instance_requirements {
+      memory_gib_per_vcpu {
+        min = 8
+        max = 8
+      }
+
+      vcpu_count {
+        min = 4
+        max = 4
+      }
     }
   }
 
