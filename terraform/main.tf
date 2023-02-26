@@ -43,118 +43,30 @@ resource "aws_spot_fleet_request" "control_plane" {
   valid_until             = "2023-02-26T20:44:20Z"
 
   launch_specification {
-    ami               = "ami-0b828c1c5ac3f13ee"
-    key_name          = "terraform-ec2"
+    ami                         = "ami-0b828c1c5ac3f13ee"
+    key_name                    = "terraform-ec2"
     associate_public_ip_address = true
 
     vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
     root_block_device {
-      volume_type = "gp3"
-      volume_size = 50
+      volume_type           = "gp3"
+      volume_size           = 50
       delete_on_termination = true
     }
 
-    instance_requirements {
-      memory_gib_per_vcpu {
-        min = 8
-        max = 8
+    override {
+      instance_requirements {
+        memory_mib {
+          min = 32768
+          max = 32768
+        }
+
+        vcpu_count {
+          min = 2
+          max = 4
+        }
       }
-
-      vcpu_count {
-        min = 4
-        max = 4
-      }
-    }
-  }
-
-  launch_specification {
-    instance_type     = "r5.xlarge"
-    ami               = "ami-0b828c1c5ac3f13ee"
-    key_name          = "terraform-ec2"
-    associate_public_ip_address = true
-
-    vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
-
-    root_block_device {
-      volume_type = "gp3"
-      volume_size = 50
-      delete_on_termination = true
-    }
-  }
-
-  launch_specification {
-    instance_type     = "r5.xlarge"
-    ami               = "ami-0b828c1c5ac3f13ee"
-    key_name          = "terraform-ec2"
-    associate_public_ip_address = true
-
-    vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
-
-    root_block_device {
-      volume_type = "gp3"
-      volume_size = 50
-      delete_on_termination = true
-    }
-  }
-
-  launch_specification {
-    instance_type     = "r6i.xlarge"
-    ami               = "ami-0b828c1c5ac3f13ee"
-    key_name          = "terraform-ec2"
-    associate_public_ip_address = true
-
-    vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
-
-    root_block_device {
-      volume_type = "gp3"
-      volume_size = 50
-      delete_on_termination = true
-    }
-  }
-
-  launch_specification {
-    instance_type     = "r5b.xlarge"
-    ami               = "ami-0b828c1c5ac3f13ee"
-    key_name          = "terraform-ec2"
-    associate_public_ip_address = true
-
-    vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
-
-    root_block_device {
-      volume_type = "gp3"
-      volume_size = 50
-      delete_on_termination = true
-    }
-  }
-
-  launch_specification {
-    instance_type     = "r5n.xlarge"
-    ami               = "ami-0b828c1c5ac3f13ee"
-    key_name          = "terraform-ec2"
-    associate_public_ip_address = true
-
-    vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
-
-    root_block_device {
-      volume_type = "gp3"
-      volume_size = 50
-      delete_on_termination = true
-    }
-  }
-
-  launch_specification {
-    instance_type     = "t3a.2xlarge"
-    ami               = "ami-0b828c1c5ac3f13ee"
-    key_name          = "terraform-ec2"
-    associate_public_ip_address = true
-
-    vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
-
-    root_block_device {
-      volume_type = "gp3"
-      volume_size = 50
-      delete_on_termination = true
     }
   }
 
