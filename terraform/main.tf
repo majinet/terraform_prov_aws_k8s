@@ -84,7 +84,9 @@ resource "aws_launch_template" "ec2_launch" {
 
     ebs {
       volume_type = "gp3"
+      throughput = 125
       volume_size = 50
+      iops = 3000
       delete_on_termination = true
     }
   }
