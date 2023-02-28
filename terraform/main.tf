@@ -62,7 +62,7 @@ resource "aws_launch_template" "ec2_launch" {
 
   instance_requirements {
     memory_mib {
-      min = 16384
+      min = 32768
       max = 65536
     }
 
