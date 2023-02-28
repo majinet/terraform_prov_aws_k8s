@@ -92,7 +92,6 @@ resource "aws_launch_template" "ec2_launch" {
   }
 }
 
-/*
 resource "aws_ec2_fleet" "control_plane" {
 
   launch_template_config {
@@ -102,7 +101,9 @@ resource "aws_ec2_fleet" "control_plane" {
     }
 
     override {
-      max_price = "0.2"
+      max_price = "0.1"
+      subnet_id = module.aws_networks.subnet_1_id
+      availability_zone = "us-east-1a"
     }
   }
 
@@ -116,7 +117,6 @@ resource "aws_ec2_fleet" "control_plane" {
 
   }
 }
-*/
 
 /*
 resource "aws_instance" "control_plane" {

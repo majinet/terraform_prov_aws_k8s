@@ -9,6 +9,7 @@ resource "aws_vpc" "kubernetes_vpc" {
 resource "aws_subnet" "kubernetes_subnet_1" {
   vpc_id     = aws_vpc.kubernetes_vpc.id
   cidr_block = "172.30.0.0/20"
+  availability_zone = "us-east-1a"
 
   tags = {
     Name = "Kubernetes Subnet 1"
