@@ -89,7 +89,7 @@ resource "aws_launch_template" "ec2_launch" {
   }
 }
 
-
+/*
 resource "aws_ec2_fleet" "control_plane" {
 
   launch_template_config {
@@ -113,7 +113,7 @@ resource "aws_ec2_fleet" "control_plane" {
 
   }
 }
-
+*/
 
 /*
 resource "aws_instance" "control_plane" {
