@@ -1,11 +1,5 @@
-data "aws_region" "current" {}
-
 resource "aws_vpc" "kubernetes_vpc" {
   cidr_block  = "172.30.0.0/16"
-
-  operating_regions {
-    region_name = data.aws_region.current.name
-  }
 
   tags = {
     Name = "Kubernetes VPC"
