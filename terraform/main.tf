@@ -54,6 +54,7 @@ data "aws_ami" "ubuntu_ami" {
   owners = ["099720109477"]
 }
 
+/*
 resource "aws_launch_template" "ec2_launch" {
   image_id    = data.aws_ami.ubuntu_ami.id
   key_name = "terraform-ec2"
@@ -117,8 +118,9 @@ resource "aws_ec2_fleet" "control_plane" {
 
   }
 }
+*/
 
-/*
+
 resource "aws_instance" "control_plane" {
   ami           = "ami-09cd747c78a9add63"
   instance_type = "r5a.xlarge"
@@ -129,7 +131,7 @@ resource "aws_instance" "control_plane" {
 
   root_block_device {
     volume_type = "gp3"
-    volume_size = 40
+    volume_size = 50
     delete_on_termination = true
   }
 
@@ -137,7 +139,7 @@ resource "aws_instance" "control_plane" {
     Name = "Kubernetes control plane instance"
   }
 }
-*/
+
 
 #resource "aws_instance" "worker" {
 #  ami           = "ami-0b828c1c5ac3f13ee"  ami-0fa715233bba2f42e
