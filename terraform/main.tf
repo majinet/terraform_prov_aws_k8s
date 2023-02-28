@@ -61,8 +61,8 @@ resource "aws_launch_template" "ec2_launch" {
 
   instance_requirements {
     memory_mib {
-      min = 32000
-      max = 64000
+      min = 16384
+      max = 65536
     }
 
     vcpu_count {
@@ -89,7 +89,7 @@ resource "aws_launch_template" "ec2_launch" {
   }
 }
 
-/*
+
 resource "aws_ec2_fleet" "control_plane" {
 
   launch_template_config {
@@ -113,8 +113,9 @@ resource "aws_ec2_fleet" "control_plane" {
 
   }
 }
-*/
 
+
+/*
 resource "aws_instance" "control_plane" {
   ami           = "ami-09cd747c78a9add63"
   instance_type = "r5a.xlarge"
@@ -133,6 +134,7 @@ resource "aws_instance" "control_plane" {
     Name = "Kubernetes control plane instance"
   }
 }
+*/
 
 #resource "aws_instance" "worker" {
 #  ami           = "ami-0b828c1c5ac3f13ee"  ami-0fa715233bba2f42e

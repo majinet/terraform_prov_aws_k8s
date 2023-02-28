@@ -31,7 +31,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            microk8s enable dns hostpath-storage dashboard helm3 ingress metallb:10.64.140.43-10.64.140.49
+            microk8s enable dns dashboard helm3 ingress metallb:10.64.140.43-10.64.140.49
 
             echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
 
@@ -62,5 +62,9 @@ jobs:
             microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --namespace kube-system
             
             microk8s kubectl get csidrivers
+            
+            export SERVER_IP=${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+            envsubst < terraform_prov_aws_k8s/microk8s/config/sc-nfs.yaml > sc-nfs.yaml
+            mv sc-nfs.yaml terraform_prov_aws_k8s/microk8s/config/sc-nfs.yaml
             
             microk8s kubectl apply -f terraform_prov_aws_k8s/microk8s/config
