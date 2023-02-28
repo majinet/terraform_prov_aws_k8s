@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: istio-ingressgateway
+  namespace: kubeflow
 spec:
   rules:
   - host: 10.64.140.43.nip.io
@@ -11,6 +12,6 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: istio-ingressgateway
+            name: istio-ingressgateway-workload
             port:
               number: 80

@@ -6,6 +6,7 @@ resource "aws_vpc" "kubernetes_vpc" {
   }
 }
 
+/*
 resource "aws_subnet" "kubernetes_subnet_1" {
   vpc_id     = aws_vpc.kubernetes_vpc.id
   cidr_block = "172.30.0.0/20"
@@ -32,6 +33,7 @@ resource "aws_subnet" "kubernetes_subnet_3" {
     Name = "Kubernetes Subnet 3"
   }
 }
+*/
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.kubernetes_vpc.id

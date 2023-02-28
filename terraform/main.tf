@@ -57,7 +57,7 @@ data "aws_ami" "ubuntu_ami" {
 resource "aws_launch_template" "ec2_launch" {
   image_id    = data.aws_ami.ubuntu_ami.id
   key_name = "terraform-ec2"
-  vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
+  #vpc_security_group_ids = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s]
 
   instance_requirements {
     memory_mib {
