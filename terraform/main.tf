@@ -140,6 +140,7 @@ resource "aws_instance" "control_plane" {
   }
 }
 
+/*
 resource "aws_instance" "juju_controller" {
   ami           = "ami-054cb116359624aa3"
   instance_type = "t4g.small"
@@ -157,7 +158,7 @@ resource "aws_instance" "juju_controller" {
   tags = {
     Name = "juju controller"
   }
-}
+}*/
 
 /*resource "aws_instance" "worker" {
   ami           = "ami-09cd747c78a9add63"
