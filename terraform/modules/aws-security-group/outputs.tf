@@ -17,3 +17,7 @@ output "sg_calico_id" {
 output "sg_microk8s" {
   value = aws_security_group.microk8s.id
 }
+
+output "sg_juju" {
+  value = aws_security_group.juju.id
+}

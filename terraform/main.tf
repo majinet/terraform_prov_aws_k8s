@@ -140,8 +140,26 @@ resource "aws_instance" "control_plane" {
   }
 }
 
+resource "aws_instance" "juju_controller" {
+  ami           = " ami-054cb116359624aa3"
+  instance_type = "r4g.small"
+  subnet_id     = module.aws_networks.subnet_1_id
+  associate_public_ip_address = true
+  key_name = "terraform-ec2"
+  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_juju]
 
-resource "aws_instance" "worker" {
+  root_block_device {
+    volume_type = "gp3"
+    volume_size = 8
+    delete_on_termination = true
+  }
+
+  tags = {
+    Name = "juju controller"
+  }
+}
+
+/*resource "aws_instance" "worker" {
   ami           = "ami-09cd747c78a9add63"
   instance_type = "t2.micro"
   subnet_id     = module.aws_networks.subnet_1_id
@@ -158,4 +176,4 @@ resource "aws_instance" "worker" {
   tags = {
     Name = "Kubernetes worker instance"
   }
-}
+}*/
