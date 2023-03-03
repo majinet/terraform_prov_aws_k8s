@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: installation
+      - name: install juju and kubeflow
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
@@ -22,3 +22,20 @@ jobs:
             juju add-model kubeflow
             
             juju deploy kubeflow --trust  --channel=1.6/stable
+
+      - name: Sleep for 1200 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '1200s'
+
+      - name: configuration
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            juju config dex-auth public-url=http://10.64.140.43.nip.io
+            juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
+            juju config dex-auth static-username=admin
+            juju config dex-auth static-password=admin
