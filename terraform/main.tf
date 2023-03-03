@@ -121,9 +121,9 @@ resource "aws_ec2_fleet" "control_plane" {
 */
 
 
-resource "aws_instance" "control_plane" {
+/*resource "aws_instance" "control_plane" {
   ami           = "ami-09cd747c78a9add63"
-  instance_type = "r5a.large"
+  instance_type = "r5a.xlarge"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
@@ -138,7 +138,7 @@ resource "aws_instance" "control_plane" {
   tags = {
     Name = "Kubernetes control plane instance"
   }
-}
+}*/
 
 /*
 resource "aws_instance" "juju_controller" {
