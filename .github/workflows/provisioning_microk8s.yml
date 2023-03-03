@@ -10,34 +10,64 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: installation
+      - name: install microk8s
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo snap install microk8s --classic --channel=1.22/stable
-            
-            sudo microk8s status --wait-ready
-            
+            sudo snap install microk8s --classic --channel=1.24/stable
+
+      - name: Sleep for 300 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '300s'
+
+      - name: configure group
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
             sudo usermod -a -G microk8s $USER
+            newgrp microk8s
             sudo chown -f -R $USER ~/.kube
 
-      - name: configuration
+      - name: enable add-on
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            microk8s enable dns storage dashboard helm3 ingress istio 
-            
-            #metallb:10.64.140.43-10.64.140.49
+          script: |            
+            microk8s enable dns
+            microk8s enable storage
+            microk8s enable dashboard 
+            microk8s enable ingress 
+            microk8s enable metallb:10.64.140.43-10.64.140.49
 
             echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
 
+      - name: Sleep for 300 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '300s'
+
+      - name: restart microk8s
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
             sudo snap restart microk8s
+
+      - name: Sleep for 30 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '300s'
 
       - name: setup NFS
         uses: appleboy/ssh-action@master
