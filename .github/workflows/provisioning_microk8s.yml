@@ -49,11 +49,9 @@ jobs:
             microk8s enable metallb:10.64.140.43-10.64.140.49
 
             echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
-
-      - name: Sleep for 300 seconds
-        uses: whatnick/wait-action@master
-        with:
-          time: '300s'
+            
+            microk8s kubectl wait --for condition=ready --timeout=300s model --all -n kube-system
+            microk8s kubectl wait --for condition=ready --timeout=300s model --all -n metallb-system
 
       - name: restart microk8s
         uses: appleboy/ssh-action@master

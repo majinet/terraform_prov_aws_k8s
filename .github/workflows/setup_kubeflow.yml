@@ -22,11 +22,7 @@ jobs:
             juju add-model kubeflow
             
             juju deploy kubeflow --trust  --channel=1.6/stable
-
-      - name: Sleep for 1200 seconds
-        uses: whatnick/wait-action@master
-        with:
-          time: '1200s'
+            microk8s kubectl wait --for condition=ready --timeout=2400s model --all -n kubeflow
 
       - name: configuration
         uses: appleboy/ssh-action@master
