@@ -22,7 +22,7 @@ jobs:
             juju add-model kubeflow
             
             juju deploy kubeflow --trust  --channel=1.6/stable
-            microk8s kubectl wait --for condition=ready --timeout=2400s pod --all -n kubeflow
+            microk8s kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
 
       - name: configuration
         uses: appleboy/ssh-action@master

@@ -33,7 +33,6 @@ jobs:
           script: |
             sudo usermod -a -G microk8s ubuntu
             newgrp microk8s
-            sudo chown -f -R ubuntu ~/.kube
 
       - name: enable add-on
         uses: appleboy/ssh-action@master
@@ -48,6 +47,8 @@ jobs:
             microk8s enable helm3
             microk8s enable ingress 
             microk8s enable metallb:10.64.140.43-10.64.140.49
+            
+            
 
             microk8s kubectl wait --for condition=ready --timeout=300s pod --all -n kube-system
             microk8s kubectl wait --for condition=ready --timeout=300s pod --all -n metallb-system
