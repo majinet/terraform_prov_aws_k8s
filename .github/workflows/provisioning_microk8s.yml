@@ -17,7 +17,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo snap install microk8s --classic
+            sudo snap install microk8s --classic --channel=1.21/stable
 
       - name: Sleep for 300 seconds
         uses: whatnick/wait-action@master
@@ -45,16 +45,11 @@ jobs:
             microk8s enable storage
             microk8s enable dashboard
             microk8s enable helm3
-            microk8s enable ingress 
-            microk8s enable metallb:10.64.140.43-10.64.140.49
-            
-            microk8s kubectl wait --for condition=ready --timeout=300s pod --all -n kube-system
-            microk8s kubectl wait --for condition=ready --timeout=300s pod --all -n metallb-system
 
-      - name: Sleep for 30 seconds
+      - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
         with:
-          time: '300s'
+          time: '60s'
 
       - name: setup NFS
         uses: appleboy/ssh-action@master

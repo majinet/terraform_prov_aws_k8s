@@ -5,13 +5,13 @@ metadata:
   namespace: kubeflow
 spec:
   rules:
-  - host: 10.64.140.43.nip.io
+  - host: 3.85.130.112.nip.io
     http:
       paths:
       - path: /
         pathType: ImplementationSpecific
         backend:
           service:
-            name: istio-ingressgateway-workload
+            name: istio-ingressgateway
             port:
               number: 80

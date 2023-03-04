@@ -21,7 +21,7 @@ jobs:
             juju bootstrap microk8s
             juju add-model kubeflow
             
-            juju deploy kubeflow --trust  --channel=1.6/stable
+            juju deploy kubeflow --trust  --channel=1.4/stable
 
       - name: Sleep for 1200 seconds
         uses: whatnick/wait-action@master
@@ -36,6 +36,13 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             microk8s kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
+            
+            microk8s enable metallb:10.64.140.43-10.64.140.49
+
+      - name: Sleep for 300 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '300s'
 
       - name: configuration
         uses: appleboy/ssh-action@master
@@ -48,3 +55,4 @@ jobs:
             juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
             juju config dex-auth static-username=admin
             juju config dex-auth static-password=admin
+            

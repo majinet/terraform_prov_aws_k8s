@@ -123,7 +123,7 @@ resource "aws_ec2_fleet" "control_plane" {
 
 /*resource "aws_instance" "control_plane" {
   ami           = "ami-09cd747c78a9add63"
-  instance_type = "r5a.xlarge"
+  instance_type = "r6i.xlarge"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
@@ -133,12 +133,37 @@ resource "aws_ec2_fleet" "control_plane" {
     volume_type = "gp3"
     volume_size = 50
     delete_on_termination = true
+    iops = 3000
+    throughput = 125
   }
 
   tags = {
     Name = "Kubernetes control plane instance"
   }
 }*/
+
+resource "aws_spot_instance_request" "control_plane" {
+  ami           = "ami-09cd747c78a9add63"
+  instance_type = "r6i.xlarge"
+  subnet_id     = module.aws_networks.subnet_1_id
+  associate_public_ip_address = true
+  key_name = "terraform-ec2"
+  security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
+
+  spot_price = 0.1
+  wait_for_fulfillment = true
+  spot_type = "persistent"
+  instance_interruption_behavior = "stop"
+
+  root_block_device {
+    volume_type = "gp3"
+    volume_size = 50
+    delete_on_termination = true
+    iops = 3000
+    throughput = 125
+  }
+
+}
 
 /*
 resource "aws_instance" "juju_controller" {
