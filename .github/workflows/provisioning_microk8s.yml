@@ -31,9 +31,9 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo usermod -a -G microk8s $USER
+            sudo usermod -a -G microk8s ubuntu
             newgrp microk8s
-            sudo chown -f -R $USER ~/.kube
+            sudo chown -f -R ubuntu ~/.kube
 
       - name: enable add-on
         uses: appleboy/ssh-action@master
@@ -49,19 +49,8 @@ jobs:
             microk8s enable ingress 
             microk8s enable metallb:10.64.140.43-10.64.140.49
 
-            echo "--advertise-address=${{ vars.AWS_EC2_CONTROL_PLANE_PRIVATE_IP }}" >> /var/snap/microk8s/current/args/kube-apiserver
-            
             microk8s kubectl wait --for condition=ready --timeout=300s pod --all -n kube-system
             microk8s kubectl wait --for condition=ready --timeout=300s pod --all -n metallb-system
-
-      - name: restart microk8s
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo snap restart microk8s
 
       - name: Sleep for 30 seconds
         uses: whatnick/wait-action@master
