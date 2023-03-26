@@ -45,6 +45,8 @@ jobs:
             microk8s enable storage
             microk8s enable dashboard
             microk8s enable helm3
+            microk8s enable rbac
+            microk8s enable ingress
 
       - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
@@ -82,3 +84,14 @@ jobs:
             mv sc-nfs.yaml terraform_prov_aws_k8s/microk8s/config/sc-nfs.yaml
             
             microk8s kubectl apply -f terraform_prov_aws_k8s/microk8s/config
+
+      - name: setup Calicoctl
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            cd /usr/local/bin/
+            sudo curl -L https://github.com/projectcalico/calico/releases/latest/download/calicoctl-linux-amd64 -o kubectl-calico
+            sudo chmod +x kubectl-calico
