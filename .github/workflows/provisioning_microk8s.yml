@@ -17,7 +17,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo snap install microk8s --classic --channel=1.21/stable
+            sudo snap install microk8s --classic --channel=1.26/stable
 
       - name: Sleep for 300 seconds
         uses: whatnick/wait-action@master
@@ -40,50 +40,22 @@ jobs:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |            
+          script: |
+            microk8s enable community
+            
             microk8s enable dns
-            microk8s enable storage
+            #microk8s enable storage
+            sudo apt update && sudo apt install -y nfs-common
+            microk8s enable nfs
             microk8s enable dashboard
             microk8s enable helm3
             microk8s enable rbac
-            microk8s enable ingress
+            #microk8s enable ingress
 
       - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
         with:
           time: '60s'
-
-      - name: setup NFS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo apt-get install -y -q nfs-kernel-server
-            
-            sudo mkdir -p /srv/nfs
-            sudo chown nobody:nogroup /srv/nfs
-            sudo chmod 0777 /srv/nfs
-            sudo mv /etc/exports /etc/exports.bak
-            echo '/srv/nfs 172.30.0.0/24(rw,sync,no_subtree_check)' | sudo tee /etc/exports
-            
-            sudo systemctl restart nfs-kernel-server
-            
-            microk8s helm3 repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
-            microk8s helm3 repo update
-            
-            microk8s helm3 install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet
-            
-            microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --namespace kube-system
-            
-            microk8s kubectl get csidrivers
-            
-            export SERVER_IP=${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-            envsubst < terraform_prov_aws_k8s/microk8s/config/sc-nfs.yaml > sc-nfs.yaml
-            mv sc-nfs.yaml terraform_prov_aws_k8s/microk8s/config/sc-nfs.yaml
-            
-            microk8s kubectl apply -f terraform_prov_aws_k8s/microk8s/config
 
       - name: setup Calicoctl
         uses: appleboy/ssh-action@master
@@ -92,6 +64,21 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
+            curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml -O
+            microk8s kubectl replace -f calico.yaml
+            
             cd /usr/local/bin/
             sudo curl -L https://github.com/projectcalico/calico/releases/latest/download/calicoctl-linux-amd64 -o kubectl-calico
             sudo chmod +x kubectl-calico
+            
+            #sudo curl -L https://github.com/projectcalico/calico/releases/latest/download/calicoctl-linux-amd64 -o calicoctl
+            #sudo chmod +x ./calicoctl
+
+      - name: deploy OPA gateway
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            microk8s kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml

@@ -1,0 +1,9 @@
+apiVersion: projectcalico.org/v3
+kind: HostEndpoint
+metadata:
+  name: enp0s8-control
+  labels:
+    host-endpoint: ingress
+spec:
+  interfaceName: enp0s8
+  node: control

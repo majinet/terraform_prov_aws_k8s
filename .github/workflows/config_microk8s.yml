@@ -9,7 +9,7 @@ jobs:
     environment: development
 
     steps:
-      - name: configure group
+      - name: configure policy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
@@ -25,4 +25,45 @@ jobs:
             microk8s kubectl apply -f microk8s/config/network_policy/deny-all.yaml
             microk8s kubectl apply -f microk8s/config/network_policy/allow-svc-kubernetes-for-kubeflow.yaml
             
-            microk8s kubectl apply -f microk8s/config/network_policy/advertis-external-ip.yaml
+            # Global network policy
+            microk8s kubectl calico apply -f microk8s/config/network_policy/protect-hosts-allow-egress.yaml
+            microk8s kubectl calico apply -f microk8s/config/network_policy/protect-hosts-deny-ingress.yaml
+            microk8s kubectl calico apply -f microk8s/config/network_policy/protect-hosts-external-access.yaml
+            
+            # Configure Host endpoints
+            #microk8s kubectl calico apply -f microk8s/config/network_policy/hep-en0s8-control.yaml
+            
+            # apply Global network policy for serivces
+            microk8s kubectl calico apply -f microk8s/config/network_policy/svc-cluster-allow-ingress.yaml
+            microk8s kubectl calico apply -f microk8s/config/network_policy/svc-cluster-allow-egress.yaml
+            
+            # enable wireguard
+            microk8s kubectl calico patch felixconfiguration default --type='merge' -p '{"spec":{"wireguardEnabled":true}}' --allow-version-mismatch
+
+      - name: enforce network policy for istio
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            microk8s kubectl calico patch FelixConfiguration default --patch '{"spec": {"policySyncPathPrefix": "/var/run/nodeagent"}}'
+            microk8s kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/csi-driver.yaml
+            microk8s kubectl create -f microk8s/config/netowrk_policy/peerauth.yaml
+            
+            curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/alp/istio-inject-configmap-1.15.yaml -o istio-inject-configmap.yaml
+            microk8s kubectl patch configmap -n istio-system istio-sidecar-injector --patch "$(cat istio-inject-configmap.yaml)"
+            
+            microk8s kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/alp/istio-app-layer-policy-envoy-v3.yaml
+            
+            microk8s kubectl label namespace kubeflow istio-injection=enabled
+            #microk8s kubectl apply -f https://docs.tigera.io/files/allow-istio-pilot.yaml
+
+      - name: configure OPA policy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            microk8s kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/demo/basic/templates/k8srequiredlabels_template.yaml
