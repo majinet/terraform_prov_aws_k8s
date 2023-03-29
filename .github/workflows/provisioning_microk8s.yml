@@ -17,7 +17,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo snap install microk8s --classic --channel=1.22/stable
+            sudo snap install microk8s --classic --channel=1.24/stable
 
       - name: Sleep for 300 seconds
         uses: whatnick/wait-action@master
@@ -69,8 +69,8 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml -O
-            kubectl replace -f calico.yaml
+            #curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml -O
+            #kubectl replace -f calico.yaml
             
             cd /usr/local/bin/
             sudo curl -L https://github.com/projectcalico/calico/releases/latest/download/calicoctl-linux-amd64 -o kubectl-calico
