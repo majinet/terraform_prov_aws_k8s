@@ -23,6 +23,15 @@ jobs:
             
             juju deploy kubeflow --trust  --channel=1.6/stable
 
+      - name: clear memory cache
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+
       - name: Sleep for 1200 seconds
         uses: whatnick/wait-action@master
         with:

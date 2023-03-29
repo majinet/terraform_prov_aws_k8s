@@ -144,7 +144,7 @@ resource "aws_ec2_fleet" "control_plane" {
 
 resource "aws_spot_instance_request" "control_plane" {
   ami           = "ami-09cd747c78a9add63"
-  instance_type = "r5.xlarge"
+  instance_type = "r6i.xlarge"
   subnet_id     = module.aws_networks.subnet_1_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
