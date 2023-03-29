@@ -35,9 +35,9 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            microk8s kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
+            kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
             
-            microk8s enable metallb:10.64.140.0/24
+            microk8s enable metallb:10.64.140.43/21
 
       - name: Sleep for 300 seconds
         uses: whatnick/wait-action@master
