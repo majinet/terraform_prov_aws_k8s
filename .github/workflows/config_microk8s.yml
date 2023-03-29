@@ -16,14 +16,14 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            microk8s kubectl create namespace kubeflow
-            microk8s kubectl apply -f microk8s/config/memory-defaults.yaml --namespace=kubeflow
-            microk8s kubectl apply -f microk8s/config/cpu-defaults.yaml --namespace=kubeflow
-            microk8s kubectl apply -f microk8s/config/hard-mem-cpu.yaml --namespace=kubeflow
-            microk8s kubectl apply -f microk8s/config/quota-pod.yaml --namespace=kubeflow
+            #microk8s kubectl create namespace kubeflow
+            #microk8s kubectl apply -f microk8s/config/memory-defaults.yaml --namespace=kubeflow
+            #microk8s kubectl apply -f microk8s/config/cpu-defaults.yaml --namespace=kubeflow
+            #microk8s kubectl apply -f microk8s/config/hard-mem-cpu.yaml --namespace=kubeflow
+            #microk8s kubectl apply -f microk8s/config/quota-pod.yaml --namespace=kubeflow
             
             microk8s kubectl apply -f microk8s/config/network_policy/deny-all.yaml
-            microk8s kubectl apply -f microk8s/config/network_policy/allow-svc-kubernetes-for-kubeflow.yaml
+            #microk8s kubectl apply -f microk8s/config/network_policy/allow-svc-kubernetes-for-kubeflow.yaml
             
             # Global network policy
             microk8s kubectl calico apply -f microk8s/config/network_policy/protect-hosts-allow-egress.yaml

@@ -17,7 +17,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo snap install microk8s --classic --channel=1.26/stable
+            sudo snap install microk8s --classic --channel=1.24/stable
 
       - name: Sleep for 300 seconds
         uses: whatnick/wait-action@master
@@ -41,12 +41,13 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            microk8s enable community
+            #microk8s enable community
             
             microk8s enable dns
             #microk8s enable storage
+            microk8s enable hostpath-storage
             sudo apt update && sudo apt install -y nfs-common
-            microk8s enable nfs
+            #microk8s enable nfs
             microk8s enable dashboard
             microk8s enable helm3
             microk8s enable rbac
