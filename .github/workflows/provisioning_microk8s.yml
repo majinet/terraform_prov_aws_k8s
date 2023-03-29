@@ -33,6 +33,10 @@ jobs:
           script: |
             sudo usermod -a -G microk8s ubuntu
             newgrp microk8s
+            
+            microk8s config > ~/.kube/config
+            sudo chown -f -R $USER ~/.kube
+            sudo snap alias microk8s.kubectl kubectl
 
       - name: enable add-on
         uses: appleboy/ssh-action@master
@@ -66,7 +70,7 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml -O
-            microk8s kubectl replace -f calico.yaml
+            kubectl replace -f calico.yaml
             
             cd /usr/local/bin/
             sudo curl -L https://github.com/projectcalico/calico/releases/latest/download/calicoctl-linux-amd64 -o kubectl-calico
@@ -82,4 +86,4 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            microk8s kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml
+            kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml
