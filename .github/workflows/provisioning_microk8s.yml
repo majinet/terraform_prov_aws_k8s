@@ -50,7 +50,7 @@ jobs:
             microk8s enable dns
             #microk8s enable storage
             microk8s enable hostpath-storage
-            sudo apt update && sudo apt install -y nfs-common
+            #sudo apt update && sudo apt install -y nfs-common
             #microk8s enable nfs
             microk8s enable dashboard
             microk8s enable helm3
