@@ -150,7 +150,7 @@ resource "aws_spot_instance_request" "control_plane" {
   key_name = "terraform-ec2"
   security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
 
-  spot_price = 0.1
+  spot_price = 0.12
   wait_for_fulfillment = true
   spot_type = "persistent"
   instance_interruption_behavior = "stop"
