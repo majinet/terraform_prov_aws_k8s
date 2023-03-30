@@ -17,9 +17,9 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            sudo apt-get update && sudo apt-get upgrade -y
-            sudo apt install traceroute -y
-            sudo snap install microk8s --classic --channel=1.22/stable
+            #sudo apt-get update && sudo apt-get upgrade -y
+            #sudo apt install traceroute -y
+            sudo snap install microk8s --classic --channel=1.23/stable
 
       - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
@@ -88,7 +88,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml
+            #kubectl apply -f https://raw.githubusercontent.com/open-policy-agent/gatekeeper/master/deploy/gatekeeper.yaml
 
       - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
