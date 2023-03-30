@@ -21,21 +21,14 @@ jobs:
             juju bootstrap microk8s
             juju add-model kubeflow
             
+            sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+            
             juju deploy kubeflow --trust  --channel=1.7/stable
 
-      - name: clear memory cache
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
-
-      - name: Sleep for 1500 seconds
+      - name: Sleep for 1200 seconds
         uses: whatnick/wait-action@master
         with:
-          time: '1500s'
+          time: '1200s'
 
       - name: check running status
         uses: appleboy/ssh-action@master
@@ -44,16 +37,13 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
+            sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
             kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
 
-      - name: clear memory cache
-        uses: appleboy/ssh-action@master
+      - name: Sleep for 300 seconds
+        uses: whatnick/wait-action@master
         with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+          time: '300s'
 
       - name: configuration
         uses: appleboy/ssh-action@master
@@ -67,3 +57,5 @@ jobs:
             juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
             juju config dex-auth static-username=admin
             juju config dex-auth static-password=admin
+            
+            juju run --unit istio-pilot/0 -- "export JUJU_DISPATCH_PATH=hooks/config-changed; ./dispatch"
