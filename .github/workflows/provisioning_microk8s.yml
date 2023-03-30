@@ -19,7 +19,7 @@ jobs:
           script: |
             sudo apt-get update && sudo apt-get upgrade -y
             sudo apt install traceroute -y
-            sudo snap install microk8s --classic --channel=1.21/stable
+            sudo snap install microk8s --classic --channel=1.22/stable
 
       - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
