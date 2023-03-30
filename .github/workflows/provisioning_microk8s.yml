@@ -17,9 +17,10 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            #sudo apt-get update && sudo apt-get upgrade -y
-            #sudo apt install traceroute -y
-            sudo snap install microk8s --classic --channel=1.23/stable
+            sudo apt-get update && sudo apt-get upgrade -y
+            sudo apt install traceroute -y
+            sudo apt install net-tools -y
+            sudo snap install microk8s --classic --channel=1.26/stable
 
       - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
