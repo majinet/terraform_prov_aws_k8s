@@ -21,7 +21,7 @@ jobs:
             juju bootstrap microk8s
             juju add-model kubeflow
             
-            juju deploy kubeflow --trust  --channel=1.6/stable
+            juju deploy kubeflow --trust  --channel=1.7/stable
 
       - name: clear memory cache
         uses: appleboy/ssh-action@master
@@ -45,8 +45,6 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
-            
-            microk8s enable metallb:10.64.140.43-10.64.140.49
 
       - name: clear memory cache
         uses: appleboy/ssh-action@master
@@ -64,6 +62,7 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
+            microk8s enable metallb:10.64.140.43-10.64.140.49
             juju config dex-auth public-url=http://10.64.140.43.nip.io
             juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
             juju config dex-auth static-username=admin
