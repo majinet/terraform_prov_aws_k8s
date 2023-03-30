@@ -19,6 +19,7 @@ resource "aws_subnet" "kubernetes_subnet_1" {
 resource "aws_subnet" "kubernetes_subnet_2" {
   vpc_id     = aws_vpc.kubernetes_vpc.id
   cidr_block = "172.30.16.0/20"
+  availability_zone = "us-east-1d"
 
   tags = {
     Name = "Kubernetes Subnet 2"
@@ -28,6 +29,7 @@ resource "aws_subnet" "kubernetes_subnet_2" {
 resource "aws_subnet" "kubernetes_subnet_3" {
   vpc_id     = aws_vpc.kubernetes_vpc.id
   cidr_block = "172.30.32.0/20"
+  availability_zone = "us-east-1f"
 
   tags = {
     Name = "Kubernetes Subnet 3"

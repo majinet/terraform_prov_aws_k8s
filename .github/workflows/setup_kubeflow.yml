@@ -60,7 +60,7 @@ jobs:
           script: |
             kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
             
-            #microk8s enable metallb:"10.64.140.43-10.64.140.49,192.168.0.105-192.168.0.111"
+            microk8s enable metallb:"10.64.140.43-10.64.140.49,192.168.0.105-192.168.0.111"
 
       - name: configuration
         uses: appleboy/ssh-action@master
@@ -73,4 +73,7 @@ jobs:
             #juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
             #juju config dex-auth static-username=admin
             #juju config dex-auth static-password=admin
+            
+            juju config dex-auth public-url=http://54.83.146.52.nip.io
+            juju config oidc-gatekeeper public-url=http://54.83.146.52.nip.io
             
