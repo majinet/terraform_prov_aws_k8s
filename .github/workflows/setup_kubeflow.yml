@@ -37,6 +37,20 @@ jobs:
         with:
           time: '1200s'
 
+      - name: clear memory cache
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+
+      - name: Sleep for 1200 seconds
+        uses: whatnick/wait-action@master
+        with:
+          time: '1200s'
+
       - name: check running status
         uses: appleboy/ssh-action@master
         with:
@@ -46,12 +60,7 @@ jobs:
           script: |
             kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
             
-            microk8s enable metallb:10.64.140.43/21
-
-      - name: Sleep for 300 seconds
-        uses: whatnick/wait-action@master
-        with:
-          time: '300s'
+            #microk8s enable metallb:"10.64.140.43-10.64.140.49,192.168.0.105-192.168.0.111"
 
       - name: configuration
         uses: appleboy/ssh-action@master
@@ -60,8 +69,8 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            juju config dex-auth public-url=http://10.64.140.43.nip.io
-            juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
-            juju config dex-auth static-username=admin
-            juju config dex-auth static-password=admin
+            #juju config dex-auth public-url=http://10.64.140.43.nip.io
+            #juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
+            #juju config dex-auth static-username=admin
+            #juju config dex-auth static-password=admin
             
