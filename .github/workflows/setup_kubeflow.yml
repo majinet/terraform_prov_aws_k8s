@@ -21,7 +21,7 @@ jobs:
             juju bootstrap microk8s
             juju add-model kubeflow
             
-            juju deploy kubeflow --trust  --channel=1.6/stable
+            juju deploy kubeflow --trust  --channel=1.4/stable
 
       - name: clear memory cache
         uses: appleboy/ssh-action@master
