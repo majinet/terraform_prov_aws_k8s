@@ -91,4 +91,22 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             microk8s helm3 repo add bitnami https://charts.bitnami.com/bitnami
-            microk8s helm3 install my-release -f postgresSQL/config/values.yaml bitnami/postgresql
+            microk8s helm3 install postgreSQL -f postgresSQL/config/values.yaml bitnami/postgresql
+
+      - name: install feast Client
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            pip3 install feast --user
+
+      - name: create kubeflow pipeline app storage
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f microk8s/config/storage/pvc-kubeflow-pipeline-app.yaml
