@@ -59,17 +59,8 @@ jobs:
             juju config dex-auth static-password=admin
             
             juju run --unit istio-pilot/0 -- "export JUJU_DISPATCH_PATH=hooks/config-changed; ./dispatch"
-
-      - name: install kfp client
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            sudo apt install python3-pip -y
-            pip3 install kfp --upgrade --user
-            echo 'export PATH=$PATH:~/.local/bin' | tee -a ~/.bashrc
+            
+            kubectl apply -f https://k8s.io/examples/admin/dns/dnsutils.yaml
 
       - name: configure Minio access
         uses: appleboy/ssh-action@master
@@ -92,15 +83,6 @@ jobs:
           script: |
             microk8s helm3 repo add bitnami https://charts.bitnami.com/bitnami
             microk8s helm3 install postgreSQL -f postgresSQL/config/values.yaml bitnami/postgresql
-
-      - name: install feast Client
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            pip3 install feast --user
 
       - name: create kubeflow pipeline app storage
         uses: appleboy/ssh-action@master
