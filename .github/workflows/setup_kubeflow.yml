@@ -25,10 +25,10 @@ jobs:
             
             juju deploy kubeflow --trust  --channel=1.7/stable
 
-      - name: Sleep for 1200 seconds
+      - name: Sleep for 1500 seconds
         uses: whatnick/wait-action@master
         with:
-          time: '1200s'
+          time: '1500s'
 
       - name: check running status
         uses: appleboy/ssh-action@master
@@ -39,11 +39,6 @@ jobs:
           script: |
             sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
             kubectl wait --for=jsonpath='{.status.phase}'=Running --timeout=2400s pod --all -n kubeflow
-
-      - name: Sleep for 300 seconds
-        uses: whatnick/wait-action@master
-        with:
-          time: '300s'
 
       - name: configuration
         uses: appleboy/ssh-action@master
@@ -82,7 +77,7 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             microk8s helm3 repo add bitnami https://charts.bitnami.com/bitnami
-            microk8s helm3 install postgreSQL -f postgresSQL/config/values.yaml bitnami/postgresql
+            microk8s helm3 install postgresql -f postgresSQL/config/values.yaml bitnami/postgresql
 
       - name: create kubeflow pipeline app storage
         uses: appleboy/ssh-action@master
