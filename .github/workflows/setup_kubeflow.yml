@@ -88,3 +88,24 @@ jobs:
           script: |
             kubectl apply -f microk8s/config/storage/pvc-kubeflow-pipeline-app.yaml
             kubectl apply -f microk8s/config/storage/pvc-kubeflow-pipeline-data.yaml
+
+      - name: provisioning redis
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            microk8s helm3 install "redis" bitnami/redis
+
+      - name: provisioning Feast Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            microk8s helm3 repo add feast-charts https://feast-helm-charts.storage.googleapis.com
+            microk8s helm3 repo update
+            #microk8s helm3 install feast-feature-server feast-charts/feast-feature-server --set feature_store_yaml_base64=$(base64 feature_store.yaml)
+            microk8s helm3 install feast-feature-server feast-charts/feast-feature-server --set feature_store_yaml_base64="cHJvamVjdDogdGl0YW5pY19mZWF0dXJlCnByb3ZpZGVyOiBsb2NhbApyZWdpc3RyeToKICAgIHJlZ2lzdHJ5X3N0b3JlX3R5cGU6IFBvc3RncmVTUUxSZWdpc3RyeVN0b3JlCiAgICBwYXRoOiBmZWFzdF9yZWdpc3RyeQogICAgaG9zdDogcG9zdGdyZXNxbC5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsCiAgICBwb3J0OiA1NDMyCiAgICBkYXRhYmFzZTogZmVhc3QKICAgIGRiX3NjaGVtYTogcHVibGljCiAgICB1c2VyOiBmZWFzdAogICAgcGFzc3dvcmQ6IGZlYXN0Cm9ubGluZV9zdG9yZToKICAgIHR5cGU6IHJlZGlzCiAgICByZWRpc190eXBlOiByZWRpc19jbHVzdGVyCiAgICBjb25uZWN0aW9uX3N0cmluZzogInJlZGlzLW1hc3Rlci5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsOjYzNzksc3NsPWZhbHNlLHBhc3N3b3JkPWJ2ZWRGT2REY1kiCm9mZmxpbmVfc3RvcmU6CiAgICB0eXBlOiBwb3N0Z3JlcwogICAgaG9zdDogcG9zdGdyZXNxbC5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsCiAgICBwb3J0OiA1NDMyCiAgICBkYXRhYmFzZTogZmVhc3QKICAgIGRiX3NjaGVtYTogcHVibGljCiAgICB1c2VyOiBmZWFzdAogICAgcGFzc3dvcmQ6IGZlYXN0CmVudGl0eV9rZXlfc2VyaWFsaXphdGlvbl92ZXJzaW9uOiAyCgo="
