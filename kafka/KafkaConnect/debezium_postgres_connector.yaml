@@ -6,6 +6,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
+  image: majinetudacitylearn/debezium-connect:latest
   replicas: 1
   #authentication:
     #type: tls
@@ -32,6 +33,7 @@ spec:
     config.storage.replication.factor: 1
     offset.storage.replication.factor: 1
     status.storage.replication.factor: 1
+
   #build:
   #  output:
   #    type: docker
@@ -83,7 +85,6 @@ spec:
     "-Xms": "1g"
   template:
     pod:
-      image: hub.docker.com/majinetudacitylearn/debezium-connect:latest
       imagePullSecrets:
       - name: dockerhub-secret
       affinity:
