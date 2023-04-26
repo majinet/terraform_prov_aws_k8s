@@ -7,7 +7,7 @@ metadata:
 spec:
   replicas: 1
   authentication:
-    type: PLAIN
+    type: plain
     #certificateAndKey:
     #  certificate: source.crt
     #  key: source.key
