@@ -1190,7 +1190,7 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
-## Creates role for ServiceAccount
+## Creates roles for ServiceAccount
 ## @param rbac.create Create Role and RoleBinding (required for PSP to work)
 ##
 rbac:
