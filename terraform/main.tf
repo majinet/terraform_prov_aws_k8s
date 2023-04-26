@@ -156,14 +156,13 @@ resource "aws_spot_instance_request" "control_plane" {
   spot_type = "persistent"
   instance_interruption_behavior = "stop"
 
-  #root_block_device {
-    #volume_type = "gp3"
-    #volume_size = 50
-    #delete_on_termination = true
-    #iops = 3000
-    #throughput = 125
-    #volume_id = "vol-045b2801bf21fe8ab"
-  #}
+  root_block_device {
+    volume_type = "gp3"
+    volume_size = 50
+    delete_on_termination = true
+    iops = 3000
+    throughput = 125
+  }
 
 }
 
