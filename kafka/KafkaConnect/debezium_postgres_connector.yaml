@@ -35,8 +35,8 @@ spec:
   build:
     output:
       type: docker
-      image: quay.io/debezium/connect:latest
-      #pushSecret: my-registry-credentials
+      image: https://hub.docker.com/majinetudacitylearn/debezium-connect:latest #quay.io/majinetudacitylearn/debezium-connect:latest
+      pushSecret: dockerhub-secret
     plugins:
       - name: debezium-postgres-connector
         artifacts:
@@ -83,6 +83,8 @@ spec:
     "-Xms": "1g"
   template:
     pod:
+      imagePullSecrets:
+      - name: dockerhub-secret
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
