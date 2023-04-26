@@ -35,14 +35,14 @@ spec:
   build:
     output:
       type: docker
-      image: https://hub.docker.com/majinetudacitylearn/debezium-connect:latest #quay.io/majinetudacitylearn/debezium-connect:latest
+      image: hub.docker.com/majinetudacitylearn/debezium-connect:latest #quay.io/majinetudacitylearn/debezium-connect:latest
       pushSecret: dockerhub-secret
     plugins:
       - name: debezium-postgres-connector
         artifacts:
           - type: tgz
             url: https://repo1.maven.org/maven2/io/debezium/debezium-connector-postgres/2.1.1.Final/debezium-connector-postgres-2.1.1.Final-plugin.tar.gz
-            sha512sum: 962a12151bdf9a5a30627eebac739955a4fd95a08d373b86bdcea2b4d0c27dd6e1edd5cb548045e115e33a9e69b1b2a352bee24df035a0447cb820077af00c03
+            #sha512sum: 962a12151bdf9a5a30627eebac739955a4fd95a08d373b86bdcea2b4d0c27dd6e1edd5cb548045e115e33a9e69b1b2a352bee24df035a0447cb820077af00c03
   #externalConfiguration:
   #  env:
   #    - name: AWS_ACCESS_KEY_ID
