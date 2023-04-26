@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup_kubeflow:
+  config_kafka:
     runs-on: ubuntu-latest
     environment: development
 
