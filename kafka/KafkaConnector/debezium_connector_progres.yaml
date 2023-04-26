@@ -10,11 +10,11 @@ spec:
   config:
     tasks.max: 1
     database.hostname: postgresql.default.svc.cluster.local
-    database.port: 5432
+    database.port: "5432"
     database.user: ${secrets:kafka/debezium-secret:username}
     database.password: ${secrets:kafka/debezium-secret:password}
-    database.dbname: feast,
-    topic.prefix: postgres
-    database.include.list: inventory
+    database.dbname: "feast"
+    topic.prefix: "debezium"
+    table.include.list: "feast.titanic_survive_svc_v1"
     schema.history.internal.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092
     schema.history.internal.kafka.topic: schema-changes.inventory
