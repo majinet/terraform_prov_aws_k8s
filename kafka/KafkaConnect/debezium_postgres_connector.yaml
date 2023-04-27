@@ -37,7 +37,7 @@ spec:
   build:
     output:
       type: docker
-      image: hub.docker.com/majinetudacitylearn/debezium-connector-postgres:2.2.0.Final #quay.io/majinetudacitylearn/debezium-connect:latest
+      image: majinetudacitylearn/debezium-connector-postgres:2.2.0.Final #quay.io/majinetudacitylearn/debezium-connect:latest
       pushSecret: dockerhub-secret
     plugins:
       - name: debezium-postgres-connector
