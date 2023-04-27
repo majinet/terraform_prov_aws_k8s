@@ -16,10 +16,10 @@ jobs:
           username: 'ubuntu'
           server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
           ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          local_path: './kafka/*'
-          remote_path: '/home/ubuntu/kafka'
+          local_path: './microk8s/*'
+          remote_path: '/home/ubuntu/microk8s'
           sftpArgs: '-o ConnectTimeout=5'
-      - name: setup service account and secret for minio
+      - name: setup service account, secret, role, rolebinding for debezium connect cluster
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
@@ -44,6 +44,15 @@ jobs:
         uses: whatnick/wait-action@master
         with:
           time: '180s'
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: 'ubuntu'
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: './kafka/*'
+          remote_path: '/home/ubuntu/kafka'
+          sftpArgs: '-o ConnectTimeout=5'
       - name: setup Postgres Connector for CDC
         uses: appleboy/ssh-action@master
         with:
