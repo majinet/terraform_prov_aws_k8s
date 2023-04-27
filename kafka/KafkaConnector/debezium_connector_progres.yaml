@@ -16,6 +16,6 @@ spec:
     database.password: ${secrets:kafka/debezium-secret:password}
     database.dbname: "feast"
     topic.prefix: "debezium"
-    table.include.list: "feast.titanic_survive_svc_v1"
+    table.include.list: "titanic_survive_svc_v1"
     schema.history.internal.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092
     schema.history.internal.kafka.topic: schema-changes.inventory
