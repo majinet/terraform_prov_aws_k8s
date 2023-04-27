@@ -6,7 +6,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
-  image: majinetudacitylearn/debezium-connect:latest
+  #image: majinetudacitylearn/debezium-connector-postgres:2.2.0.Final
   replicas: 1
   #authentication:
     #type: tls
