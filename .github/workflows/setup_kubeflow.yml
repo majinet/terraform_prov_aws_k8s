@@ -66,6 +66,8 @@ jobs:
           script: |
             juju config minio access-key=minio
             juju config minio secret-key=minio1234
+            kubectl apply -f microk8s/secrets/minio_secret.yaml
+            kubectl apply -f microk8s/serviceaccounts/sa_minio_fullaccess_default.yaml
             
             # Create service account in Minio and change accesskey and secret key in Client api
 
@@ -78,15 +80,6 @@ jobs:
           script: |
             kubectl apply -f microk8s/config/storage/pvc-kubeflow-pipeline-app.yaml
             kubectl apply -f microk8s/config/storage/pvc-kubeflow-pipeline-data.yaml
-
-      - name: provisioning redis
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
-          username: ${{ vars.AWS_EC2_USERNAME }}
-          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
-          script: |
-            microk8s helm3 install "redis" bitnami/redis
 
       - name: provisioning Feast Server
         uses: appleboy/ssh-action@master

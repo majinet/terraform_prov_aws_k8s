@@ -19,7 +19,18 @@ jobs:
           local_path: './kafka/*'
           remote_path: '/home/ubuntu/kafka'
           sftpArgs: '-o ConnectTimeout=5'
-
+      - name: setup service account and secret for minio
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f microk8s/secrets/docker_secret.yaml
+            kubectl apply -f microk8s/secrets/debezium_secret.yaml
+            kubectl apply -f microk8s/serviceaccounts/debezium_connect_cluster_connect.yaml
+            kubectl apply -f microk8s/roles/connector_configuration_role.yaml
+            kubectl apply -f microk8s/roles/connector_configuration_role_binding.yaml
       - name: setup Kafka Connector Cluster with Postgres plugin
         uses: appleboy/ssh-action@master
         with:

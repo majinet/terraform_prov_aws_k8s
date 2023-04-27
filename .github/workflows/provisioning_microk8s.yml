@@ -106,3 +106,12 @@ jobs:
           script: |
             microk8s helm3 repo add bitnami https://charts.bitnami.com/bitnami
             microk8s helm3 install postgresql -f postgresSQL/config/values.yaml bitnami/postgresql
+
+      - name: provisioning redis
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            microk8s helm3 install "redis" bitnami/redis
