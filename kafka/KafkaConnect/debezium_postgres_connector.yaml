@@ -15,10 +15,10 @@ spec:
     #  key: source.key
     #  secretName: my-user-source
   bootstrapServers: my-cluster-kafka-bootstrap:9092
-  tls:
-    trustedCertificates:
-      - secretName: my-cluster-cluster-ca-cert
-        certificate: ca.crt
+  #tls:
+  #  trustedCertificates:
+  #    - secretName: my-cluster-cluster-ca-cert
+  #      certificate: ca.crt
   config:
     config.providers: secrets
     config.providers.secrets.class: io.strimzi.kafka.KubernetesSecretConfigProvider
