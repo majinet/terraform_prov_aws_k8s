@@ -302,10 +302,8 @@ primary:
   ##   host all all localhost trust
   ##   host mydatabase mysuser 192.168.0.0/24 md5
   ##
-  pgHbaConfiguration: |-
-    #local   replication     repl_user                          trust   
-    host    replication     repl_user  10.152.183.35/32        trust   
-    #host    replication     repl_user  ::1/128                 trust 
+  pgHbaConfiguration: |- 
+    host    replication     repl_user  110.152.183.0/24        trust   
 
   ## @param primary.existingConfigmap Name of an existing ConfigMap with PostgreSQL Primary configuration
   ## NOTE: `primary.configuration` and `primary.pgHbaConfiguration` will be ignored
