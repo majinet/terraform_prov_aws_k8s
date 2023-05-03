@@ -306,8 +306,8 @@ primary:
     host    replication     repl_user  10.152.183.0/24        trust
     host    replication     repl_user  127.0.0.1/32         trust
     host    replication     repl_user  10.1.22.0/24        trust
-    host    feast     feast  127.0.0.1/32        trust
-    host    feast     feast  10.1.22.0/24        trust
+    host    feast     all  127.0.0.1/32        trust
+    host    feast     all  10.1.22.0/24        trust
     host    postgres     postgres  10.1.22.0/24        trust
 
   ## @param primary.existingConfigmap Name of an existing ConfigMap with PostgreSQL Primary configuration

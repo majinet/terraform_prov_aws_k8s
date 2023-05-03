@@ -39,13 +39,3 @@ To connect to your database from outside the cluster execute the following comma
     PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U feast -d feast -p 5432
 
 WARNING: The configured password will be ignored on new installation in case when previous Posgresql release was deleted through the helm command. In that case, old PVC will have an old password, and setting it through helm won't take effect. Deleting persistent volumes (PVs) will solve the issue.
-
-CREATE TABLE titanic_survive_svc_v1 (
-    id SERIAL PRIMARY KEY,
-    name TEXT,
-    age INTEGER,
-    email TEXT UNIQUE
-);
-
-INSERT INTO titanic_survive_svc_v1 (name, age, email) VALUES ('John Doe', 30, 'john.doe@example.com');
-INSERT INTO titanic_survive_svc_v1 (name, age, email) VALUES ('John Go', 31, 'john.go@example.com');
