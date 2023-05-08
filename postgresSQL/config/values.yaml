@@ -303,7 +303,6 @@ primary:
   ##   host mydatabase mysuser 192.168.0.0/24 md5
   ##
   pgHbaConfiguration: |- 
-    host    replication     repl_user  10.152.183.0/24        trust
     host    replication     repl_user  127.0.0.1/32         trust
     host    replication     repl_user  10.1.22.0/24        trust
     host    feast     all  127.0.0.1/32        trust
