@@ -1,0 +1,44 @@
+name: setup AI Lab
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_ai:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: 'ubuntu'
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: './microk8s/*'
+          remote_path: '/home/ubuntu/microk8s'
+          sftpArgs: '-o ConnectTimeout=5'
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: 'ubuntu'
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: './sonarqube/*'
+          remote_path: '/home/ubuntu/microk8s'
+          sftpArgs: '-o ConnectTimeout=5'
+      - name: install sonarqube
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            helm repo add sonarqube https://SonarSource.github.io/helm-chart-sonarqube
+            helm repo update
+            kubectl create namespace sonarqube
+            helm upgrade --install -n sonarqube sonarqube sonarqube/sonarqube
+            
+            kubectl apply -f microk8s/config/storage/pvc-sonar-app.yaml
+            kubectl apply -f sonarqube/config/sonarqube_svc_lb.yaml

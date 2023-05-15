@@ -14,8 +14,10 @@ spec:
     database.port: "5432"
     database.user: ${secrets:kafka/debezium-secret:username}
     database.password: ${secrets:kafka/debezium-secret:password}
-    #database.dbname: feast
-    topic.prefix: debezium
-    database.include.list: feast
-    schema.history.internal.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092
-    schema.history.internal.kafka.topic: schema-changes.feast
+    plugin.name: pgoutput
+    topic.prefix: feast
+    database.dbname: feast
+    table.whitelist: public.titanic_survive_svc_v1
+    publication.autocreate.mode: filtered
+    #schema.history.internal.kafka.bootstrap.servers: my-cluster-kafka-bootstrap:9092
+    #schema.history.internal.kafka.topic: schema-changes.feast
