@@ -1,0 +1,39 @@
+name: Copy configure files to microk8s
+
+on:
+  workflow_dispatch:
+
+jobs:
+  copy_config_to_k8s:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: 'ubuntu'
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: './microk8s/*'
+          remote_path: '/home/ubuntu/microk8s'
+          sftpArgs: '-o ConnectTimeout=5'
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: 'ubuntu'
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: './postgresSQL/*'
+          remote_path: '/home/ubuntu/postgresSQL'
+          sftpArgs: '-o ConnectTimeout=5'
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: 'ubuntu'
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: './kafka/*'
+          remote_path: '/home/ubuntu/kafka'
+          sftpArgs: '-o ConnectTimeout=5'
