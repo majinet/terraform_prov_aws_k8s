@@ -22,7 +22,7 @@ spec:
           - "-U"
           - "postgres"
           - "-f"
-          - "postgres/config/init.sql"
+          - "config/init.sql"
         env:
         - name: PGPASSWORD
           valueFrom:
