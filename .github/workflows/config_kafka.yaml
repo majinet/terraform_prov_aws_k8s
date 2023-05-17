@@ -39,6 +39,7 @@ jobs:
             kubectl apply -f microk8s/secrets/debezium_secret.yaml
             kubectl apply -f microk8s/secrets/postgresql_online_secret.yaml
             kubectl apply -f microk8s/serviceaccounts/debezium_connect_cluster_connect.yaml
+            kubectl apply -f microk8s/serviceaccounts/kafka-connect-sink-postgres-cluster-connect.yaml
             kubectl apply -f microk8s/roles/connector_configuration_role.yaml
             kubectl apply -f microk8s/roles/connector_configuration_role_binding.yaml
       - name: Sleep for 60 seconds

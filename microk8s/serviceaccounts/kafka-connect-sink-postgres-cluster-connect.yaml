@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kafka-connect-sink-postgres-cluster-connect
+  namespace: kafka
+secrets:
+- name: postgresql-online-secret

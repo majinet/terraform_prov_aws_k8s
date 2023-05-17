@@ -11,3 +11,17 @@ roleRef:
   kind: Role
   name: connector-configuration-roles
   apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sink-connector-postgres-configuration-roles-binding
+  namespace: kafka
+subjects:
+- kind: ServiceAccount
+  name: kafka-connect-sink-postgres-cluster-connect
+  namespace: kafka
+roleRef:
+  kind: Role
+  name: connector-configuration-roles
+  apiGroup: rbac.authorization.k8s.io
