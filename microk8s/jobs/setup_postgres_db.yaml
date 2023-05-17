@@ -16,7 +16,7 @@ spec:
         command:
           - "psql"
           - "-h"
-          - "postgres"
+          - "postgresql"
           - "-p"
           - "5432"
           - "-U"
