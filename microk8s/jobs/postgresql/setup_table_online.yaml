@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: job-setup-postgres-table-offline
+  name: job-setup-postgres-table-online
   namespace: kafka
 spec:
   parallelism: 1

@@ -41,13 +41,19 @@ jobs:
             kubectl apply -f microk8s/serviceaccounts/debezium_connect_cluster_connect.yaml
             kubectl apply -f microk8s/roles/connector_configuration_role.yaml
             kubectl apply -f microk8s/roles/connector_configuration_role_binding.yaml
-            
-            kubectl apply -f microk8s/jobs/postgresql/setup_table_offline.yaml
-            kubectl apply -f microk8s/jobs/postgresql/setup_table_online.yaml
-      - name: Sleep for 180 seconds
+      - name: Sleep for 60 seconds
         uses: whatnick/wait-action@master
         with:
           time: '60s'
+      - name: run jobs to create tables
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            kubectl apply -f microk8s/jobs/postgresql/setup_table_offline.yaml
+            kubectl apply -f microk8s/jobs/postgresql/setup_table_online.yaml
       - name: setup Kafka Connector Cluster with Postgres plugin
         uses: appleboy/ssh-action@master
         with:

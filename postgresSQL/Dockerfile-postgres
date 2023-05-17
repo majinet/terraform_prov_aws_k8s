@@ -4,3 +4,4 @@ WORKDIR postgres
 COPY ./postgresSQL .
 
 RUN ls .
+RUN ls config/*
