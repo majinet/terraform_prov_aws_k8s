@@ -1,0 +1,6 @@
+FROM bitnami/postgresql:15.2.0-debian-11-r5
+
+WORKDIR postgres
+COPY ./postgresSQL .
+
+RUN ls .
