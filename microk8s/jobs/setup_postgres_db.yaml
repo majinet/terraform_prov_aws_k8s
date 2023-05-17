@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-setup-postgres-db
+spec:
+  parallelism: 1
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        app: setup-postgres-db
+    spec:
+      containers:
+      - name: setup-postgres-db
+        image: majinetudacitylearn/postgres-cli:v0.0.1
+        command:
+          - "PGPASSWORD=$(POSTGRES_ADMIN_PASSWORD)"
+          - "psql"
+          - "-h"
+          - "postgresql"
+          - "-p"
+          - "5432"
+          - "-U"
+          - "postgres"
+        env:
+        - name: POSTGRES_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: postgres-password
+        imagePullPolicy: Always
+      restartPolicy: Never
+  backoffLimit: 0
