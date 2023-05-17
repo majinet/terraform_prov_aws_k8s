@@ -11,6 +11,8 @@ spec:
   config:
     topics: feast.public.titanic_survive_svc_v1
     tasks.max: 1
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
     camel.kamelet.postgresql-sink.serverName: postgresql.default.svc.cluster.local
     camel.kamelet.postgresql-sink.serverPort: "5432"
     camel.kamelet.postgresql-sink.username: ${secrets:kafka/postgresql-online-secret:username}
