@@ -13,15 +13,6 @@ spec:
       containers:
       - name: setup-postgres-db
         image: majinetudacitylearn/postgres-cli:v0.0.1
-        command:
-          - "PGPASSWORD=$(POSTGRES_ADMIN_PASSWORD)"
-          - "psql"
-          - "-h"
-          - "postgresql"
-          - "-p"
-          - "5432"
-          - "-U"
-          - "postgres"
         env:
         - name: POSTGRES_ADMIN_PASSWORD
           valueFrom:
