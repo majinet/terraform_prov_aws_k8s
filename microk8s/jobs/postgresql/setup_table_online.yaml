@@ -17,7 +17,7 @@ spec:
         command:
           - "psql"
           - "-h"
-          - "postgresql"
+          - "postgresql.default.svc.cluster.local"
           - "-p"
           - "5432"
           - "-U"
