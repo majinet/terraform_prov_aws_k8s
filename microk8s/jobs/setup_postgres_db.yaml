@@ -13,8 +13,18 @@ spec:
       containers:
       - name: setup-postgres-db
         image: majinetudacitylearn/postgres-cli:v0.0.1
+        command:
+          - "psql"
+          - "-h"
+          - "postgres"
+          - "-p"
+          - "5432"
+          - "-U"
+          - "postgres"
+          - "-f"
+          - "postgres/config/init.sql"
         env:
-        - name: POSTGRES_ADMIN_PASSWORD
+        - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
               name: postgresql
