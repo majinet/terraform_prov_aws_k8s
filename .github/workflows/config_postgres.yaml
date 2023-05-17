@@ -35,4 +35,4 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            kubectl apply -f microk8s/jobs/setup_postgres_db.yaml
+            kubectl apply -f microk8s/jobs/postgresql/setup_db.yaml

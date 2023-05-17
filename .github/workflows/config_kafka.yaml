@@ -41,6 +41,9 @@ jobs:
             kubectl apply -f microk8s/serviceaccounts/debezium_connect_cluster_connect.yaml
             kubectl apply -f microk8s/roles/connector_configuration_role.yaml
             kubectl apply -f microk8s/roles/connector_configuration_role_binding.yaml
+            
+            kubectl apply -f microk8s/jobs/postgresql/setup_table_offline.yaml
+            kubectl apply -f microk8s/jobs/postgresql/setup_table_online.yaml
       - name: setup Kafka Connector Cluster with Postgres plugin
         uses: appleboy/ssh-action@master
         with:
