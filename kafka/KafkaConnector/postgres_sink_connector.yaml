@@ -1,0 +1,19 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: sink-connector-progres
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: kafka-connect-sink-postgres-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.postgresqlsink.CamelPostgresqlsinkSinkConnector
+  tasksMax: 1
+  config:
+    topic.: feast.public.titanic_survive_svc_v1
+    tasks.max: 1
+    camel.kamelet.postgresql-sink.serverName: postgresql.default.svc.cluster.local
+    camel.kamelet.postgresql-sink.serverPort: "5432"
+    camel.kamelet.postgresql-sink.username: ${secrets:kafka/postgresql-online-secret:username}
+    camel.kamelet.postgresql-sink.password: ${secrets:kafka/postgresql-online-secret:password}
+    camel.kamelet.postgresql-sink.query: postgresql.default.svc.cluster.local
+    camel.kamelet.postgresql-sink.databaseName: "feast_online"

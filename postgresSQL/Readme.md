@@ -26,12 +26,18 @@ To get the password for "feast" run:
 
     export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.password}" | base64 -d)
 
+To get the password for "feast_online" run:
+
+    export POSTGRES_ONLINE_PASSWORD=$(kubectl get secret --namespace kafka postgresql-online-secret -o jsonpath="{.data.password}" | base64 -d)
+
 To connect to your database run the following command:
 
     kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:15.2.0-debian-11-r5 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgresql -U feast -d feast -p 5432
     kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:15.2.0-debian-11-r5 --env="PGPASSWORD=$POSTGRES_ADMIN_PASSWORD" --command -- psql --host postgresql -U postgres -p 5432
 
     kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:15.2.0-debian-11-r5 --env="PGPASSWORD=$POSTGRES_ADMIN_PASSWORD" --command -- psql --host postgresql -U postgres -d feast -p 5432
+
+    kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace default --image docker.io/bitnami/postgresql:15.2.0-debian-11-r5 --env="PGPASSWORD=$POSTGRES_ONLINE_PASSWORD" --command -- psql --host postgresql -U feast_online -d feast_online -p 5432
 
     > NOTE: If you access the container using bash, make sure that you execute "/opt/bitnami/scripts/postgresql/entrypoint.sh /bin/bash" in order to avoid the error "psql: local user with ID 1001} does not exist"
 

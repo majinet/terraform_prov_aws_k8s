@@ -1,0 +1,112 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: kafka-connect-sink-postgres-cluster
+  namespace: kafka
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+spec:
+  image: majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.20.3
+  replicas: 1
+  #authentication:
+    #type: tls
+    #certificateAndKey:
+    #  certificate: source.crt
+    #  key: source.key
+    #  secretName: my-user-source
+  bootstrapServers: my-cluster-kafka-bootstrap:9092
+  #tls:
+  #  trustedCertificates:
+  #    - secretName: my-cluster-cluster-ca-cert
+  #      certificate: ca.crt
+  config:
+    config.providers: secrets
+    config.providers.secrets.class: io.strimzi.kafka.KubernetesSecretConfigProvider
+    group.id: sink-connect-progres-cluster
+    offset.storage.topic: sink-connect-progres--cluster-offsets
+    config.storage.topic: sink-connect-progres--cluster-configs
+    status.storage.topic: sink-connect-progres--cluster-status
+    #key.converter: org.apache.kafka.connect.json.JsonConverter
+    #value.converter: org.apache.kafka.connect.json.JsonConverter
+    #key.converter.schemas.enable: true
+    #value.converter.schemas.enable: true
+    config.storage.replication.factor: -1
+    offset.storage.replication.factor: -1
+    status.storage.replication.factor: -1
+
+  #build:
+  #  output:
+  #    type: docker
+  #    image: majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.20.3
+  #    pushSecret: dockerhub-secret
+  #  plugins:
+  #    - name: sink-connect-postgresql
+  #      artifacts:
+  #        - type: tgz
+  #          url: https://repo.maven.apache.org/maven2/org/apache/camel/kafkaconnector/camel-postgresql-sink-kafka-connector/3.20.3/camel-postgresql-sink-kafka-connector-3.20.3-package.tar.gz
+            #sha512sum: 962a12151bdf9a5a30627eebac739955a4fd95a08d373b86bdcea2b4d0c27dd6e1edd5cb548045e115e33a9e69b1b2a352bee24df035a0447cb820077af00c03
+  #externalConfiguration:
+  #  env:
+  #    - name: AWS_ACCESS_KEY_ID
+  #      valueFrom:
+  #        secretKeyRef:
+  #          name: aws-creds
+  #          key: awsAccessKey
+  #    - name: AWS_SECRET_ACCESS_KEY
+  #      valueFrom:
+  #        secretKeyRef:
+  #          name: aws-creds
+  #          key: awsSecretAccessKey
+  #resources:
+  #  requests:
+  #    cpu: "1"
+  #    memory: 2Gi
+  #  limits:
+  #    cpu: "2"
+  #    memory: 2Gi
+  #logging:
+  #  type: inline
+  #  loggers:
+  #    log4j.rootLogger: "INFO"
+  #readinessProbe:
+  #  initialDelaySeconds: 15
+  #  timeoutSeconds: 5
+  #livenessProbe:
+  #  initialDelaySeconds: 15
+  #  timeoutSeconds: 5
+  #metricsConfig:
+  #  type: jmxPrometheusExporter
+  #  valueFrom:
+  #    configMapKeyRef:
+  #      name: my-config-map
+  #      key: my-key
+  #jvmOptions:
+  #  "-Xmx": "1g"
+  #  "-Xms": "1g"
+  #template:
+  #  buildPod:
+  #    metadata:
+  #      annotations:
+  #        sidecar.istio.io/inject: "false"
+  #  pod:
+  #    imagePullSecrets:
+  #    - name: dockerhub-secret
+  #    affinity:
+  #      podAntiAffinity:
+  #        requiredDuringSchedulingIgnoredDuringExecution:
+  #          - labelSelector:
+  #              matchExpressions:
+  #                - key: application
+  #                  operator: In
+  #                  values:
+  #                    - postgresql
+  #                    - mongodb
+  #            topologyKey: "kubernetes.io/hostname"
+    #connectContainer:
+    #  env:
+    #    - name: JAEGER_SERVICE_NAME
+    #      value: my-jaeger-service
+    #    - name: JAEGER_AGENT_HOST
+    #      value: jaeger-agent-name
+    #    - name: JAEGER_AGENT_PORT
+    #      value: "6831"
