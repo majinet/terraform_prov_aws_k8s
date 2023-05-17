@@ -6,5 +6,5 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["secrets"]
-  resourceNames: ["debezium-secret"]
+  resourceNames: ["debezium-secret","postgresql-online-secret"]
   verbs: ["get"]
