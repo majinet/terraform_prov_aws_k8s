@@ -10,7 +10,6 @@ spec:
   tasksMax: 1
   config:
     topics: feast.public.titanic_survive_svc_v1
-    plugin.path: /opt/kafka/plugins/sink-connect-postgresql/0ec1ee34
     tasks.max: 1
     key.converter: org.apache.kafka.connect.storage.StringConverter
     value.converter: org.apache.kafka.connect.storage.StringConverter
