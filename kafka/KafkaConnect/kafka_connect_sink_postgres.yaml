@@ -26,6 +26,7 @@ spec:
     offset.storage.topic: sink-connect-progres--cluster-offsets
     config.storage.topic: sink-connect-progres--cluster-configs
     status.storage.topic: sink-connect-progres--cluster-status
+    plugin.path: /opt/kafka/plugins/sink-connect-postgresql/0ec1ee34
     #key.converter: org.apache.kafka.connect.json.JsonConverter
     #value.converter: org.apache.kafka.connect.json.JsonConverter
     #key.converter.schemas.enable: true
