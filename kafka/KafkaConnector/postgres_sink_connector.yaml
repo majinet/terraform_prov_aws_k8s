@@ -16,3 +16,4 @@ spec:
     connection.url: jdbc:postgresql://postgresql.default.svc.cluster.local:5432/feast_online
     connection.user: ${secrets:kafka/postgresql-online-secret:username}
     connection.password: ${secrets:kafka/postgresql-online-secret:password}
+    plugin.path: /opt/kafka/plugins/sink-connect-postgresql/0ec1ee34
