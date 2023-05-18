@@ -33,7 +33,7 @@ spec:
     config.storage.replication.factor: -1
     offset.storage.replication.factor: -1
     status.storage.replication.factor: -1
-    plugin.path: /opt/kafka/plugins
+    plugin.path: /opt/kafka/plugins/sink-connect-postgresql/0ec1ee34
 
   #build:
   #  output:
