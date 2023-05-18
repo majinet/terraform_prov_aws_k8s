@@ -6,7 +6,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
-  #image: majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.20.3
+  image: majinetudacitylearn/confluent-kafka-connect-jdbc:10.6.4
   replicas: 1
   #authentication:
     #type: tls
@@ -34,16 +34,16 @@ spec:
     offset.storage.replication.factor: -1
     status.storage.replication.factor: -1
 
-  build:
-    output:
-      type: docker
-      image: majinetudacitylearn/confluent-kafka-connect-jdbc:10.6.4
-      pushSecret: dockerhub-secret
-    plugins:
-      - name: sink-connect-postgresql
-        artifacts:
-          - type: jar
-            url: https://packages.confluent.io/maven/io/confluent/kafka-connect-jdbc/10.6.4/kafka-connect-jdbc-10.6.4.jar
+  #build:
+  #  output:
+  #    type: docker
+  #    image: majinetudacitylearn/confluent-kafka-connect-jdbc:10.6.4
+  #    pushSecret: dockerhub-secret
+  #  plugins:
+  #    - name: sink-connect-postgresql
+  #      artifacts:
+  #        - type: jar
+  #          url: https://packages.confluent.io/maven/io/confluent/kafka-connect-jdbc/10.6.4/kafka-connect-jdbc-10.6.4.jar
             #sha512sum: 962a12151bdf9a5a30627eebac739955a4fd95a08d373b86bdcea2b4d0c27dd6e1edd5cb548045e115e33a9e69b1b2a352bee24df035a0447cb820077af00c03
   #externalConfiguration:
   #  env:
