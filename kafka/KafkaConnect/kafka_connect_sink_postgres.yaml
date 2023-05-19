@@ -38,13 +38,13 @@ spec:
   build:
     output:
       type: docker
-      image: majinetudacitylearn/confluent-kafka-connect-jdbc:10.6.4
+      image: majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.18.2
       pushSecret: dockerhub-secret
     plugins:
       - name: sink-connect-postgresql
         artifacts:
-          - type: jar
-            url: https://packages.confluent.io/maven/io/confluent/kafka-connect-jdbc/10.6.4/kafka-connect-jdbc-10.6.4.jar
+          - type: tgz
+            url: https://repo.maven.apache.org/maven2/org/apache/camel/kafkaconnector/camel-postgresql-sink-kafka-connector/3.18.2/camel-postgresql-sink-kafka-connector-3.18.2-package.tar.gz #https://packages.confluent.io/maven/io/confluent/kafka-connect-jdbc/10.6.4/kafka-connect-jdbc-10.6.4.jar
             #sha512sum: 962a12151bdf9a5a30627eebac739955a4fd95a08d373b86bdcea2b4d0c27dd6e1edd5cb548045e115e33a9e69b1b2a352bee24df035a0447cb820077af00c03
           - type: jar
             url: https://jdbc.postgresql.org/download/postgresql-42.2.27.jre7.jar
