@@ -1,6 +1,6 @@
 FROM majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.20.3
 
 WORKDIR /opt/kafka/plugins/sink-connect-postgresql/aa78f1fc
-RUN curl -o postgresql-42.2.27.jre7.jar https://jdbc.postgresql.org/download/postgresql-42.2.27.jre7.jar 
+COPY microk8s/artifacts .
 
 RUN ls .
