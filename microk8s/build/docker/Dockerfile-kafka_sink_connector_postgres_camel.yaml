@@ -1,6 +1,5 @@
 FROM majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.20.3
 
-WORKDIR /opt/kafka/plugins/sink-connect-postgresql/aa78f1fc
-COPY microk8s/artifacts .
+COPY microk8s/artifacts /opt/kafka/plugins/sink-connect-postgresql/aa78f1fc
 
-RUN ls .
+RUN ls /opt/kafka/plugins/sink-connect-postgresql/aa78f1fc
