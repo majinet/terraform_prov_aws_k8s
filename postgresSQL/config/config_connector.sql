@@ -13,10 +13,9 @@ ALTER USER feast WITH LOGIN REPLICATION;
 CREATE DATABASE feast WITH OWNER feast;
 
 CREATE TABLE titanic_survive_svc_v1 (
-    id SERIAL PRIMARY KEY,
     name TEXT,
     age INTEGER,
-    email TEXT UNIQUE
+    email TEXT UNIQUE PRIMARY KEY
 );
 
 INSERT INTO titanic_survive_svc_v1 (name, age, email) VALUES ('John Doe', 30, 'john.doe@example.com');
@@ -31,9 +30,8 @@ ALTER USER feast_online WITH LOGIN;
 CREATE DATABASE feast_online WITH OWNER feast_online;
 
 CREATE TABLE titanic_survive_svc_v1 (
-    id SERIAL PRIMARY KEY,
     name TEXT,
     age INTEGER,
-    email TEXT UNIQUE
+    email TEXT UNIQUE PRIMARY KEY
 );
 
