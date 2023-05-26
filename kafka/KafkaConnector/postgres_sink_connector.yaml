@@ -17,7 +17,7 @@ spec:
     camel.kamelet.postgresql-sink.serverPort: 5432
     camel.kamelet.postgresql-sink.username: ${secrets:kafka/postgresql-online-secret:username}
     camel.kamelet.postgresql-sink.password: ${secrets:kafka/postgresql-online-secret:password}
-    camel.kamelet.postgresql-sink.query: INSERT INTO TITANIC_SURVIVE_SVC_V1(NAME, AGE, EMAIL) VALUES (:#NAME, :#AGE, :#EMAIL);
+    camel.kamelet.postgresql-sink.query: INSERT INTO TITANIC_SURVIVE_SVC_V1(ID, NAME, AGE, EMAIL) VALUES (:#ID, :#NAME, :#AGE, :#EMAIL);
     camel.kamelet.postgresql-sink.databaseName: feast_online
     #connection.url: jdbc:postgresql://postgresql.default.svc.cluster.local:5432/feast_online
     #connection.user: ${secrets:kafka/postgresql-online-secret:username}
