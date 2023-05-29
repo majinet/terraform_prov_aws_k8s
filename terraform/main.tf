@@ -144,14 +144,14 @@ resource "aws_ec2_fleet" "control_plane" {
 
 resource "aws_spot_instance_request" "control_plane" {
   ami           = "ami-09cd747c78a9add63"
-  instance_type = "r5.large"
+  instance_type = "r5.xlarge"
   availability_zone = "us-east-1f"
   subnet_id     = module.aws_networks.subnet_3_id
   associate_public_ip_address = true
   key_name = "terraform-ec2"
   security_groups = [module.aws_security_group.sg_1, module.aws_security_group.sg_microk8s, module.aws_security_group.sg_control_plane_id, module.aws_security_group.sg_calico_id]
 
-  spot_price = 0.04
+  spot_price = 0.08
   wait_for_fulfillment = true
   spot_type = "persistent"
   instance_interruption_behavior = "stop"

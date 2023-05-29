@@ -34,7 +34,7 @@ jobs:
             kubectl apply -f https://download.elastic.co/downloads/eck/2.8.0/operator.yaml
             
             # Deploy Elasticsearch
-            kubectl apply -f eck/elasticsearch.yaml
+            kubectl apply -f eck/config/elasticsearch.yaml
             
             
             
