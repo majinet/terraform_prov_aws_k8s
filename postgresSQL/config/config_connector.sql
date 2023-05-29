@@ -15,7 +15,7 @@ CREATE DATABASE feast WITH OWNER feast;
 CREATE TABLE titanic_survive_svc_v1 (
     name TEXT,
     age INTEGER,
-    email TEXT UNIQUE PRIMARY KEY
+    email TEXT UNIQUE NOT NULL PRIMARY KEY
 );
 
 INSERT INTO titanic_survive_svc_v1 (name, age, email) VALUES ('John Doe', 30, 'john.doe@example.com');
@@ -32,6 +32,6 @@ CREATE DATABASE feast_online WITH OWNER feast_online;
 CREATE TABLE titanic_survive_svc_v1 (
     name TEXT,
     age INTEGER,
-    email TEXT UNIQUE PRIMARY KEY
+    email TEXT UNIQUE NOT NULL PRIMARY KEY
 );
 
