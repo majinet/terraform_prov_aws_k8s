@@ -10,6 +10,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: deploy file to server
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: 'ubuntu'
+          server: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          ssh_private_key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          local_path: './eck/*'
+          remote_path: '/home/ubuntu/eck'
+          sftpArgs: '-o ConnectTimeout=5'
       - name: install ECK (Elastic Cloud on Kubernetes)
         uses: appleboy/ssh-action@master
         with:
@@ -18,15 +27,15 @@ jobs:
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
             
-            #add elastic helm repo
-            microk8s helm3 repo add elastic https://helm.elastic.co
-            microk8s helm3 repo update
+            # Install Elasticsearch by eck
+            kubectl create -f https://download.elastic.co/downloads/eck/2.8.0/crds.yaml
             
             # Install the Elastic operator
-            microk8s helm3 install elastic-operator elastic/eck-operator -n elastic-system --create-namespace
-            kubectl wait pod/elastic-operator-0 --for=condition=Ready --timeout=300s -n elastic-system
+            kubectl apply -f https://download.elastic.co/downloads/eck/2.8.0/operator.yaml
             
-            # Install Elasticsearch by eck
-            microk8s helm3 install es-kb-quickstart elastic/eck-stack -n elastic-stack --create-namespace
-            kubectl wait pod/es-kb-quickstart-es-default-0 --for=condition=Ready --timeout=300s -n elastic-stack
+            # Deploy Elasticsearch
+            kubectl apply -f eck/elasticsearch.yaml
             
+            
+            
+           
