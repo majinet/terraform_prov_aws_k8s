@@ -1,0 +1,32 @@
+name: Provisioning log monitoring
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup_kafka:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: install ECK (Elastic Cloud on Kubernetes)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            
+            #add elastic helm repo
+            microk8s helm3 repo add elastic https://helm.elastic.co
+            microk8s helm3 repo update
+            
+            # Install the Elastic operator
+            microk8s helm3 install elastic-operator elastic/eck-operator -n elastic-system --create-namespace
+            kubectl wait pod/elastic-operator-0 --for=condition=Ready --timeout=300s -n elastic-system
+            
+            # Install Elasticsearch by eck
+            microk8s helm3 install es-kb-quickstart elastic/eck-stack -n elastic-stack --create-namespace
+            kubectl wait pod/es-kb-quickstart-es-default-0 --for=condition=Ready --timeout=300s -n elastic-stack
+            
