@@ -25,7 +25,7 @@ spec:
         # node.master: true
         node.roles: [ "master" ]
         xpack.ml.enabled: true
-        node.remote_cluster_client: false
+        #node.remote_cluster_client: false
       podTemplate:
         spec:
           containers:
@@ -51,7 +51,7 @@ spec:
         # node.ml: true
         # node.transform: true
         node.roles: [ "data", "ingest", "ml", "transform" ]
-        node.remote_cluster_client: false
+        #node.remote_cluster_client: false
       podTemplate:
         spec:
           containers:
