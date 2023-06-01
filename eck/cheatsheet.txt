@@ -1,0 +1,5 @@
+# get password for elastic user
+kubectl get secret es-cluster-es-elastic-user -o go-template='{{.data.elastic | base64decode }}' -n elastic-system
+
+# get secret token for apm-server
+kubectl get secret/apm-server-sample-apm-token -o go-template='{{index .data "secret-token" | base64decode}}'

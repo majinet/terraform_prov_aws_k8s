@@ -1,0 +1,18 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana-sample
+  namespace: elastic-system
+spec:
+  version: 8.8.0
+  count: 1
+  elasticsearchRef:
+    name: es-cluster
+    namespace: elastic-system
+  http:
+    service:
+      spec:
+        type: LoadBalancer # default is ClusterIP
+    tls:
+      selfSignedCertificate:
+        disabled: true

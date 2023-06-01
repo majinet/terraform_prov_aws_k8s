@@ -59,6 +59,7 @@ jobs:
             microk8s enable helm3
             microk8s enable rbac
             #microk8s enable ingress
+            microk8s enable metrics-server
             microk8s enable prometheus
 
       - name: Sleep for 60 seconds
