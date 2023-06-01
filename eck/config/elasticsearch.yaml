@@ -62,3 +62,10 @@ spec:
               command: [ 'sh', '-c', 'sysctl -w vm.max_map_count=262144' ]
           containers:
             - name: elasticsearch
+  http:
+    service:
+      spec:
+        type: LoadBalancer # default is ClusterIP
+    tls:
+      selfSignedCertificate:
+        disabled: true

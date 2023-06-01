@@ -35,6 +35,26 @@ jobs:
             
             # Deploy Elasticsearch
             kubectl apply -f eck/config/elasticsearch.yaml
+            # Deploy Kibana
+            kubectl apply -f eck/config/kibana.yaml
+            # Deploy apm-server
+            kubectl apply -f eck/config/apmserver.yaml
+
+      - name: Sleep for 3 minutes
+        uses: whatnick/wait-action@master
+        with:
+          time: '3m'
+      - name: install ECK (Elastic Cloud on Kubernetes)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.AWS_EC2_CONTROL_PLANE_IP }}
+          username: ${{ vars.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
+          script: |
+            # Deploy beats
+            kubectl apply -f eck/config/beat.yaml
+            # Deploy logstash
+            kubectl apply -f eck/config/logstash.yaml
             
             
             

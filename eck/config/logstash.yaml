@@ -8,9 +8,11 @@ spec:
   elasticsearchRefs:
     - name: es-cluster
       namespace: elastic-system
+      clusterName: es-cluster
   version: 8.8.0
   pipelines:
     - pipeline.id: main
+      pipeline.workers: 1
       config.string: |
         input {
           kafka {
@@ -21,10 +23,10 @@ spec:
         }
         output {
           elasticsearch {
-            hosts => ["es-cluster-es-http.elastic-system:9200"]
+            hosts => ["10.64.140.43:9200"]
             manage_template => false
             index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
             user => "elastic"
-            password => "x49886qXcCN23kg7PiQH9KS1"
+            password => "5l2J0rO1cEZnOwvO6064ry62"
           }
         }
