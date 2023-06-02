@@ -40,5 +40,5 @@ jobs:
           username: ${{ vars.AWS_EC2_USERNAME }}
           key: ${{ secrets.AWS_EC2_PRIVATE_KEY }}
           script: |
-            microk8s helm3 install "redis" bitnami/redis
+            #microk8s helm3 install "redis" bitnami/redis
 
