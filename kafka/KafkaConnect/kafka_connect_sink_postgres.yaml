@@ -6,7 +6,7 @@ metadata:
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
-  image: majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.18.2
+  image: majinetudacitylearn/confluent-kafka-connect-jdbc:10.6.4 #majinetudacitylearn/camel-postgresql-sink-kafka-connector:3.18.2
   replicas: 1
   #authentication:
     #type: tls

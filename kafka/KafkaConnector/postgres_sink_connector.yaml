@@ -6,19 +6,27 @@ metadata:
   labels:
     strimzi.io/cluster: kafka-connect-sink-postgres-cluster
 spec:
-  class: org.apache.camel.kafkaconnector.postgresqlsink.CamelPostgresqlsinkSinkConnector #io.confluent.connect.jdbc.JdbcSinkConnector
+  class: io.confluent.connect.jdbc.JdbcSinkConnector #org.apache.camel.kafkaconnector.postgresqlsink.CamelPostgresqlsinkSinkConnector
   tasksMax: 1
   config:
     topics: feast.public.titanic_survive_svc_v1
     tasks.max: 1
     key.converter: org.apache.kafka.connect.storage.StringConverter
     value.converter: org.apache.kafka.connect.storage.StringConverter
-    camel.kamelet.postgresql-sink.serverName: postgresql.default.svc.cluster.local
-    camel.kamelet.postgresql-sink.serverPort: 5432
-    camel.kamelet.postgresql-sink.username: ${secrets:kafka/postgresql-online-secret:username}
-    camel.kamelet.postgresql-sink.password: ${secrets:kafka/postgresql-online-secret:password}
-    camel.kamelet.postgresql-sink.query: INSERT INTO titanic_survive_svc_v1(name, age, email) VALUES (:#name, :#age, :#email);
-    camel.kamelet.postgresql-sink.databaseName: feast_online
-    #connection.url: jdbc:postgresql://postgresql.default.svc.cluster.local:5432/feast_online
-    #connection.user: ${secrets:kafka/postgresql-online-secret:username}
-    #connection.password: ${secrets:kafka/postgresql-online-secret:password}
+    #camel.kamelet.postgresql-sink.serverName: postgresql.default.svc.cluster.local
+    #camel.kamelet.postgresql-sink.serverPort: 5432
+    #camel.kamelet.postgresql-sink.username: ${secrets:kafka/postgresql-online-secret:username}
+    #camel.kamelet.postgresql-sink.password: ${secrets:kafka/postgresql-online-secret:password}
+    #camel.kamelet.postgresql-sink.query: INSERT INTO titanic_survive_svc_v1(name, age, email) VALUES (:#name, :#age, :#email);
+    #camel.kamelet.postgresql-sink.databaseName: feast_online
+    transforms: unwrap,
+    transforms.unwrap.type: io.debezium.transforms.ExtractNewRecordState,
+    transforms.unwrap.drop.tombstones: "false",
+    auto.create: true,
+    insert.mode: upsert,
+    delete.enabled: true,
+    pk.fields: id,
+    pk.mode: record_key
+    connection.url: jdbc:postgresql://postgresql.default.svc.cluster.local:5432/feast_online
+    connection.user: ${secrets:kafka/postgresql-online-secret:username}
+    connection.password: ${secrets:kafka/postgresql-online-secret:password}
