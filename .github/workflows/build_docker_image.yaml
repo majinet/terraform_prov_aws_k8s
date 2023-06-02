@@ -30,10 +30,10 @@ jobs:
           file: postgresSQL/Dockerfile-postgres
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/postgres-cli:v0.0.1
-      - name: Build and push (kafka sink connector - postgres camel)
+      - name: Build and push (kafka sink connector - postgres confluent)
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: microk8s/build/docker/Dockerfile-kafka_sink_connector_postgres_camel.yaml
+          file: microk8s/build/docker/Dockerfile-kafka_sink_connector_postgres_confluence.yaml
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/camel-postgresql-sink-kafka-connector:3.20.3.final
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/confluent-kafka-connect-jdbc-postgres:10.7.0

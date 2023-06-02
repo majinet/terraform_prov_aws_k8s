@@ -1,0 +1,3 @@
+FROM majinetudacitylearn/confluent-kafka-connect-jdbc-postgres:10.7.0
+
+COPY microk8s/artifacts/postgresql-42.2.27.jre7.jar /opt/kafka/plugins/sink-connect-postgresql/627a95aa/postgresql-42.2.27.jre7.jar
